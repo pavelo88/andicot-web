@@ -14,7 +14,7 @@ export const Navbar = () => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     
-    // Al cargar, sincronizamos el estado visual con la clase del document
+    // Sincronización inicial del estado del componente con la realidad del DOM
     const isDark = document.documentElement.classList.contains('dark');
     setTheme(isDark ? 'dark' : 'light');
     
