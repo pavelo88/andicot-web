@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -133,10 +132,10 @@ export default function AdminPage() {
         onLogout={() => setIsLogged(false)}
         isSaving={isSaving}
       >
-        <main className="flex-1 w-full p-4 md:p-0 overflow-y-auto">
+        <main className="flex-1 w-full p-0 overflow-y-auto">
           
           {activeTab === 'general' && (
-            <div className="max-w-5xl mx-auto space-y-8">
+            <div className="max-w-7xl mx-auto space-y-8">
               <div className="flex bg-white p-2 rounded-xl border shadow-sm mb-6 w-full overflow-x-auto no-scrollbar">
                 <button onClick={() => setGeneralView('metrics')} className={`flex-shrink-0 flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'metrics' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}><LayoutDashboard size={18} /> Métricas</button>
                 <button onClick={() => setGeneralView('content')} className={`flex-shrink-0 flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'content' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}><Settings size={18} /> Contenido</button>
@@ -193,7 +192,7 @@ export default function AdminPage() {
           )}
 
           {activeTab === 'ecosystems' && (
-            <div className="max-w-5xl mx-auto space-y-4">
+            <div className="max-w-7xl mx-auto space-y-4">
               <button onClick={() => setContent({...content, services: [{ id: Date.now(), title: 'Nuevo', desc: '', imgUrl: '', icon: 'Cpu' }, ...content.services]})} className="bg-secondary text-white px-4 py-2 rounded flex items-center gap-2 text-sm ml-auto hover:bg-opacity-90 transition-colors"><Plus size={16} /> Nuevo</button>
               {content.services.map((s, i) => (
                 <div key={s.id} className="bg-white p-6 rounded-2xl border flex flex-col md:flex-row gap-6 relative shadow-sm">
@@ -217,9 +216,9 @@ export default function AdminPage() {
           )}
 
           {activeTab === 'brands' && (
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               <button onClick={() => setContent({...content, brands: [...content.brands, { id: Date.now(), name: 'Nueva', url: '' }]})} className="bg-secondary text-white px-4 py-2 rounded flex items-center gap-2 text-sm ml-auto mb-6 hover:bg-opacity-90 transition-colors"><Plus size={16} /> Nueva Marca</button>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {content.brands.map((b, i) => (
                   <div key={b.id} className="bg-white p-4 rounded-xl border relative flex flex-col items-center gap-4 shadow-sm">
                     <button onClick={() => setContent({...content, brands: content.brands.filter(br => br.id !== b.id)})} className="absolute top-2 right-2 text-red-300 hover:text-red-600 transition-colors"><Trash2 size={16}/></button>
