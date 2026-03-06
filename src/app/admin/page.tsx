@@ -73,11 +73,23 @@ export default function AdminPage() {
   };
 
   const handleUpload = async (file: File, path: string, callback: (url: string) => void) => {
-    if (!storage) return alert('Storage no configurado');
-    const fileRef = ref(storage, `site/${path}/${Date.now()}_${file.name}`);
-    await uploadBytes(fileRef, file);
-    const url = await getDownloadURL(fileRef);
-    callback(url);
+    if (!storage) return alert('Firebase Storage no está configurado correctamente en el archivo .env');
+    
+    try {
+      const fileRef = ref(storage, `site/${path}/${Date.now()}_${file.name}`);
+      const uploadResult = await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(uploadResult.ref);
+      callback(url);
+    } catch (err: any) {
+      console.error('Error en upload:', err);
+      if (err.code === 'storage/unauthorized') {
+        alert('Error: No tienes permisos para subir archivos. Revisa las reglas de seguridad de Firebase Storage.');
+      } else if (err.message.includes('CORS')) {
+        alert('Error de CORS: Debes configurar las políticas CORS en tu bucket de Firebase Storage para permitir subidas desde este dominio.');
+      } else {
+        alert('Error al subir la imagen: ' + (err.message || 'Error desconocido'));
+      }
+    }
   };
 
   const handleGenSEO = async () => {
@@ -189,7 +201,7 @@ export default function AdminPage() {
                     <div className="space-y-5">
                       <div><label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Título Principal</label><input value={content.heroTitle} onChange={e => setContent({...content, heroTitle: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" /></div>
                       <div><label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Subtítulo Descriptivo</label><textarea value={content.heroSubtitle} onChange={e => setContent({...content, heroSubtitle: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" rows={4} /></div>
-                      <div><label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Texto del Botón (CTA)</label><input value={content.ctaText} onChange={e => setContent({...content, ctaText: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" /></div>
+                      <div><label className="text-[10px) font-black text-muted-foreground uppercase tracking-widest">Texto del Botón (CTA)</label><input value={content.ctaText} onChange={e => setContent({...content, ctaText: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" /></div>
                     </div>
                   </div>
                   
