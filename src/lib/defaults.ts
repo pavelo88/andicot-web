@@ -1,28 +1,28 @@
 import { SiteContent } from './types';
 
 export const defaultServices = [
-  { id: 1, title: "CCTV y Videovigilancia", desc: "Sistemas de cámaras PTZ, Térmicas y Analítica de Video avanzada con Inteligencia Artificial.", imgUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800", icon: "ShieldCheck" },
-  { id: 2, title: "Control de Acceso", desc: "Seguridad biométrica, reconocimiento facial, torniquetes y cerraduras electrónicas gestionadas.", imgUrl: "https://images.unsplash.com/photo-1510511233900-4054415891e4?auto=format&fit=crop&q=80&w=800", icon: "Fingerprint" },
-  { id: 3, title: "Respaldo Energético", desc: "UPS industriales de alta capacidad, bancos de baterías y generadores automatizados.", imgUrl: "https://images.unsplash.com/photo-1620288627228-db37f71bc7db?auto=format&fit=crop&q=80&w=800", icon: "Zap" },
-  { id: 4, title: "Domótica Corporativa", desc: "Automatización integral de edificios, iluminación inteligente y control climático centralizado.", imgUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=800", icon: "Cpu" },
-  { id: 5, title: "Redes e Infraestructura", desc: "Switches empresariales, enrutadores de núcleo, Access Points y radioenlaces robustos.", imgUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800", icon: "Network" },
-  { id: 6, title: "Cableado Estructurado", desc: "Diseño e instalación certificada de redes en Cobre y Fibra Óptica de alta velocidad.", imgUrl: "https://images.unsplash.com/photo-1515524738708-327f6b0037a7?auto=format&fit=crop&q=80&w=800", icon: "LinkIcon" },
-  { id: 7, title: "Detección de Incendios", desc: "Sistemas de alarmas tempranas, sensores iónicos y paneles de control homologados.", imgUrl: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800", icon: "BellRing" },
-  { id: 8, title: "Cartelería Digital", desc: "Implementación de Videowalls, pantallas interactivas 4K y software de señalización comercial.", imgUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800", icon: "MonitorPlay" },
-  { id: 9, title: "Equipamiento Informático", desc: "Provisión e instalación de Servidores Rackeables, Workstations y Laptops corporativas.", imgUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800", icon: "Server" },
-  { id: 10, title: "Licenciamiento Software", desc: "Implementación de Office 365, Antivirus empresariales (EDR) y sistemas operativos.", imgUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800", icon: "Lock" }
+  { id: 1, title: "CCTV y Videovigilancia", desc: "Sistemas de cámaras PTZ, Térmicas y Analítica de Video avanzada con Inteligencia Artificial.", imgUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800", icon: "ShieldCheck" },
+  { id: 2, title: "Control de Acceso", desc: "Seguridad biométrica, reconocimiento facial, torniquetes y cerraduras electrónicas gestionadas.", imgUrl: "https://images.unsplash.com/photo-1510511233900-4054415891e4?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1510511233900-4054415891e4?auto=format&fit=crop&q=80&w=800", icon: "Fingerprint" },
+  { id: 3, title: "Respaldo Energético", desc: "UPS industriales de alta capacidad, bancos de baterías y generadores automatizados.", imgUrl: "https://images.unsplash.com/photo-1620288627228-db37f71bc7db?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1620288627228-db37f71bc7db?auto=format&fit=crop&q=80&w=800", icon: "Zap" },
+  { id: 4, title: "Domótica Corporativa", desc: "Automatización integral de edificios, iluminación inteligente y control climático centralizado.", imgUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=800", icon: "Cpu" },
+  { id: 5, title: "Redes e Infraestructura", desc: "Switches empresariales, enrutadores de núcleo, Access Points y radioenlaces robustos.", imgUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800", icon: "Network" },
+  { id: 6, title: "Cableado Estructurado", desc: "Diseño e instalación certificada de redes en Cobre y Fibra Óptica de alta velocidad.", imgUrl: "https://images.unsplash.com/photo-1515524738708-327f6b0037a7?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1515524738708-327f6b0037a7?auto=format&fit=crop&q=80&w=800", icon: "LinkIcon" },
+  { id: 7, title: "Detección de Incendios", desc: "Sistemas de alarmas tempranas, sensores iónicos y paneles de control homologados.", imgUrl: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800", icon: "BellRing" },
+  { id: 8, title: "Cartelería Digital", desc: "Implementación de Videowalls, pantallas interactivas 4K y software de señalización comercial.", imgUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800", icon: "MonitorPlay" },
+  { id: 9, title: "Equipamiento Informático", desc: "Provisión e instalación de Servidores Rackeables, Workstations y Laptops corporativas.", imgUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800", icon: "Server" },
+  { id: 10, title: "Licenciamiento Software", desc: "Implementación de Office 365, Antivirus empresariales (EDR) y sistemas operativos.", imgUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800", defaultImgUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800", icon: "Lock" }
 ];
 
 export const defaultBrands = [
-  { id: 1, name: 'PELCO', url: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Pelco_wordmark_tm_Clean_PMS300C.png' },
-  { id: 2, name: 'AVIGILON', url: 'https://cdn.worldvectorlogo.com/logos/avigilon-logo.svg' },
-  { id: 3, name: 'MOTOROLA', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Motorola-Logo.svg/1920px-Motorola-Logo.svg.png' },
-  { id: 4, name: 'BOSCH', url: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Bosch-logo.svg' },
-  { id: 5, name: 'TYCO', url: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Tyco-Logo.svg' },
-  { id: 6, name: 'HIKVISION', url: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Hikvision_logo.svg' },
-  { id: 7, name: 'CISCO', url: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg' },
-  { id: 8, name: 'HONEYWELL', url: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Honeywell_logo.svg' },
-  { id: 9, name: 'APC', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/LogoAPC.svg' }
+  { id: 1, name: 'PELCO', url: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Pelco_wordmark_tm_Clean_PMS300C.png', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Pelco_wordmark_tm_Clean_PMS300C.png' },
+  { id: 2, name: 'AVIGILON', url: 'https://cdn.worldvectorlogo.com/logos/avigilon-logo.svg', defaultUrl: 'https://cdn.worldvectorlogo.com/logos/avigilon-logo.svg' },
+  { id: 3, name: 'MOTOROLA', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Motorola-Logo.svg/1920px-Motorola-Logo.svg.png', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Motorola-Logo.svg/1920px-Motorola-Logo.svg.png' },
+  { id: 4, name: 'BOSCH', url: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Bosch-logo.svg', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Bosch-logo.svg' },
+  { id: 5, name: 'TYCO', url: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Tyco-Logo.svg', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Tyco-Logo.svg' },
+  { id: 6, name: 'HIKVISION', url: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Hikvision_logo.svg', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Hikvision_logo.svg' },
+  { id: 7, name: 'CISCO', url: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg' },
+  { id: 8, name: 'HONEYWELL', url: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Honeywell_logo.svg', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Honeywell_logo.svg' },
+  { id: 9, name: 'APC', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/LogoAPC.svg', defaultUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/LogoAPC.svg' }
 ];
 
 export const defaultStats = [

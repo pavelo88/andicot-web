@@ -261,9 +261,14 @@ export default function AdminPage() {
                         <ImagePreview src={s.imgUrl} alt={s.title} fallbackIcon={UploadCloud} />
                         {s.imgUrl && (
                           <button 
-                            onClick={() => { const items = [...content.services]; items[i].imgUrl = ''; setContent({...content, services: items}); }}
+                            onClick={() => { 
+                              const items = [...content.services]; 
+                              // Si hay una por defecto, volvemos a ella. Si no, vacío.
+                              items[i].imgUrl = items[i].defaultImgUrl || ''; 
+                              setContent({...content, services: items}); 
+                            }}
                             className="absolute top-2 right-2 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                            title="Eliminar Imagen"
+                            title={s.defaultImgUrl ? "Restaurar Original" : "Eliminar Imagen"}
                           >
                             <XCircle size={16} />
                           </button>
@@ -310,9 +315,15 @@ export default function AdminPage() {
                       <BrandPreview src={b.url} name={b.name} />
                       {b.url && (
                         <button 
-                          onClick={() => { const items = [...content.brands]; items[i].url = ''; setContent({...content, brands: items}); }}
+                          onClick={() => { 
+                            const items = [...content.brands]; 
+                            // Si la URL actual NO es la original, volvemos a la original.
+                            // Si ya es la original o no tiene, se limpia.
+                            items[i].url = items[i].defaultUrl || ''; 
+                            setContent({...content, brands: items}); 
+                          }}
                           className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                          title="Eliminar Logo"
+                          title={b.defaultUrl ? "Restaurar Original" : "Eliminar Imagen"}
                         >
                           <XCircle size={12} />
                         </button>

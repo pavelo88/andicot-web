@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
   const [hasError, setHasError] = useState(false);
 
-  // Si no hay URL o hay error, mostramos el texto estilizado
+  // Evitamos el error de "empty string" no renderizando el <img> si no hay URL
   const shouldShowText = !brand.url || hasError;
 
   return (
