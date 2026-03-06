@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Settings, Server, ImageIcon, Users, LogOut, Cpu, Save, Menu, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 
 interface DashboardProps {
@@ -46,7 +46,7 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
   return (
     <div className="min-h-screen flex flex-col md:flex-row font-headline text-gray-900 bg-slate-50">
       {/* Sidebar Desktop */}
-      <aside className="hidden md:flex w-64 bg-secondary text-white flex-col flex-shrink-0 sticky top-0 h-screen">
+      <aside className="hidden md:flex w-64 bg-secondary text-white flex-col flex-shrink-0 sticky top-0 h-screen shadow-xl">
         <div className="h-20 flex items-center px-6 border-b border-white/10 bg-[#1e2246]">
           <div className="flex items-center gap-2">
             <Cpu className="text-primary" size={24} />
@@ -62,7 +62,7 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
       </aside>
 
       {/* Header Mobile */}
-      <header className="md:hidden h-16 bg-secondary text-white flex items-center justify-between px-4 sticky top-0 z-50 border-b border-white/10">
+      <header className="md:hidden h-16 bg-secondary text-white flex items-center justify-between px-4 sticky top-0 z-50 border-b border-white/10 shadow-md">
         <div className="flex items-center gap-2">
           <Cpu className="text-primary" size={20} />
           <span className="font-bold text-lg">Admin<span className="text-primary">Portal</span></span>
@@ -74,9 +74,10 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0 bg-secondary text-white border-none">
-            <div className="h-16 flex items-center px-6 border-b border-white/10 bg-[#1e2246]">
-               <span className="font-bold text-xl text-primary">Menú</span>
-            </div>
+            <SheetHeader className="h-16 flex flex-row items-center px-6 border-b border-white/10 bg-[#1e2246] space-y-0">
+               <SheetTitle className="text-xl font-bold text-primary">Menú</SheetTitle>
+               <SheetDescription className="sr-only">Panel de navegación administrativa para ANDICOT.</SheetDescription>
+            </SheetHeader>
             {navItems}
             <div className="p-4 border-t border-white/10 mt-auto">
               <button onClick={onLogout} className="w-full flex items-center justify-center gap-2 text-gray-400 hover:text-white py-2 text-sm">
@@ -113,7 +114,7 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
              <Button 
                 onClick={onSave} 
                 disabled={isSaving} 
-                className="rounded-full h-14 w-14 shadow-2xl bg-primary text-secondary hover:bg-white"
+                className="rounded-full h-14 w-14 shadow-2xl bg-primary text-secondary hover:scale-105 active:scale-95 transition-transform"
              >
                 {isSaving ? <Cpu className="animate-spin" size={24} /> : <Save size={24} />}
              </Button>

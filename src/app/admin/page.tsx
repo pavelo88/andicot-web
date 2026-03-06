@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Search, Menu, LayoutDashboard, Settings } from 'lucide-react';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc, collection } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { SiteContent } from '@/lib/types';
@@ -17,19 +17,27 @@ export default function AdminPage() {
   const [isLogged, setIsLogged] = useState(false);
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('general');
-  // NUEVO: Sub-menú para separar Métricas de la Edición de la Web
   const [generalView, setGeneralView] = useState<'metrics' | 'content'>('metrics');
   
   const [content, setContent] = useState<SiteContent>(defaultSiteContent);
+  const [leadsCount, setLeadsCount] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [seoResult, setSeoResult] = useState<any>(null);
   const [loadingAI, setLoadingAI] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'config', 'siteContent'), (snapshot) => {
+    const unsubContent = onSnapshot(doc(db, 'config', 'siteContent'), (snapshot) => {
       if (snapshot.exists()) setContent(snapshot.data() as SiteContent);
     });
-    return () => unsub();
+
+    const unsubLeads = onSnapshot(collection(db, 'leads'), (snapshot) => {
+      setLeadsCount(snapshot.size);
+    });
+
+    return () => {
+      unsubContent();
+      unsubLeads();
+    };
   }, []);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -82,14 +90,14 @@ export default function AdminPage() {
               <Lock size={32} className="text-primary" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-center mb-8">Acceso Admin</h2>
+          <h2 className="text-2xl font-bold text-center mb-8 text-white">Acceso Admin</h2>
           <form onSubmit={handleLogin} className="space-y-6">
             <input 
               type="password" 
               required 
               value={password} 
               onChange={e => setPassword(e.target.value)} 
-              className="w-full bg-background border border-gray-700 rounded-lg p-4 text-center text-xl focus:border-primary outline-none" 
+              className="w-full bg-background border border-gray-700 rounded-lg p-4 text-center text-xl focus:border-primary outline-none text-white" 
               placeholder="••••••••" 
             />
             <button type="submit" className="w-full bg-primary text-secondary font-bold py-4 rounded-lg hover:bg-white transition-colors">Entrar</button>
@@ -108,28 +116,26 @@ export default function AdminPage() {
         onLogout={() => setIsLogged(false)}
         isSaving={isSaving}
       >
-        <main className="flex-1 w-full p-4 md:p-8 overflow-y-auto max-h-screen pb-24">
+        <main className="flex-1 w-full p-4 md:p-0 overflow-y-auto">
           
           {activeTab === 'general' && (
             <div className="max-w-5xl mx-auto space-y-8">
               
-              {/* SUB-MENÚ INTERNO (Métricas vs Edición de la Web) */}
               <div className="flex bg-white p-2 rounded-xl border shadow-sm mb-6 w-full md:w-fit">
                 <button 
                   onClick={() => setGeneralView('metrics')}
-                  className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'metrics' ? 'bg-primary text-white shadow' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'metrics' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
                 >
                   <Cpu size={18} /> Métricas y Visitas
                 </button>
                 <button 
                   onClick={() => setGeneralView('content')}
-                  className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'content' ? 'bg-primary text-white shadow' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'content' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
                 >
                   <Settings size={18} /> Editar Web
                 </button>
               </div>
 
-              {/* VISTA DE MÉTRICAS Y VISITAS */}
               {generalView === 'metrics' && (
                 <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
@@ -151,21 +157,20 @@ export default function AdminPage() {
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between">
-                      <p className="text-sm text-gray-500 font-medium">Leads Pendientes</p>
-                      <p className="text-4xl font-bold text-orange-500 mt-2">{content.stats[0]?.value || '0'}</p>
-                      <span className="text-xs text-slate-400 mt-2">En base de datos</span>
+                      <p className="text-sm text-gray-500 font-medium">Leads Registrados</p>
+                      <p className="text-4xl font-bold text-orange-500 mt-2">{leadsCount}</p>
+                      <span className="text-xs text-slate-400 mt-2">En base de datos real</span>
                     </div>
                   </div>
                   
                   <div className="bg-white p-6 rounded-2xl border shadow-sm h-64 flex flex-col items-center justify-center text-center">
                      <Loader2 className="animate-spin text-gray-300 mb-2" size={32} />
                      <p className="text-gray-400 font-medium mt-2">Gráfico de visitas a la página</p>
-                     <p className="text-sm text-gray-400 italic max-w-md mt-2">Aquí conectaremos los datos de Google Analytics (Looker Studio) para ver la curva de visitantes de los últimos 28 días.</p>
+                     <p className="text-sm text-gray-400 italic max-w-md mt-2">Aquí conectaremos los datos de Google Analytics para ver la curva de visitantes de los últimos 28 días.</p>
                   </div>
                 </section>
               )}
 
-              {/* VISTA DE EDICIÓN DE LA WEB */}
               {generalView === 'content' && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="bg-white p-8 rounded-2xl border shadow-sm">
@@ -248,18 +253,6 @@ export default function AdminPage() {
                         className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-100 transition-colors disabled:opacity-50"
                       >
                         {loadingAI === `desc-${s.id}` ? <Loader2 size={14} className="animate-spin inline" /> : '✨ Desc IA'}
-                      </button>
-                      <button 
-                        onClick={async () => {
-                          setLoadingAI(`post-${s.id}`);
-                          const post = await generateSocialMediaPost({ title: s.title, description: s.desc });
-                          navigator.clipboard.writeText(post); alert('Post copiado al portapapeles');
-                          setLoadingAI(null);
-                        }}
-                        disabled={loadingAI === `post-${s.id}`}
-                        className="bg-purple-50 text-purple-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-purple-100 transition-colors disabled:opacity-50"
-                      >
-                        {loadingAI === `post-${s.id}` ? <Loader2 size={14} className="animate-spin inline" /> : '📱 Post Social'}
                       </button>
                     </div>
                   </div>
