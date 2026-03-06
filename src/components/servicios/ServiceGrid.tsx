@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { IconMapper } from '../icons/IconMapper';
 import { Service } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -22,13 +22,13 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[420px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/60 to-transparent dark:from-[#05060d] dark:via-[#05060d]/70 dark:to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent dark:from-[#05060d] dark:via-[#05060d]/70 dark:to-transparent z-10"></div>
         {!imgError ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
             onError={() => setImgError(true)}
-            className="w-full h-full object-cover opacity-60 dark:opacity-40 group-hover:opacity-80 dark:group-hover:opacity-60 group-hover:scale-110 transition-all duration-1000" 
+            className="w-full h-full object-cover opacity-95 dark:opacity-40 group-hover:opacity-100 dark:group-hover:opacity-60 group-hover:scale-110 transition-all duration-1000" 
           />
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -49,7 +49,7 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
         )}>
           {service.title}
         </h3>
-        <p className="text-muted-foreground text-[10px] md:text-sm font-body italic line-clamp-2 opacity-80">
+        <p className="text-muted-foreground text-[10px] md:text-sm font-body italic line-clamp-2 opacity-90 dark:opacity-80">
           {service.desc}
         </p>
       </div>
