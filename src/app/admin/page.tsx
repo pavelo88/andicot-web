@@ -132,7 +132,7 @@ export default function AdminPage() {
         onLogout={() => setIsLogged(false)}
         isSaving={isSaving}
       >
-        <main className="w-full">
+        <main className="w-full max-w-7xl mx-auto">
           
           {activeTab === 'metrics' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -177,7 +177,7 @@ export default function AdminPage() {
                 <h3 className="font-bold text-lg mb-6 flex items-center gap-2">
                   <BarChart3 size={20} className="text-primary" /> Rendimiento de la Página
                 </h3>
-                <div className="h-64 bg-slate-50 rounded-2xl border-2 border-dashed flex items-center justify-center text-gray-400">
+                <div className="h-96 bg-slate-50 rounded-2xl border-2 border-dashed flex items-center justify-center text-gray-400">
                   <p className="text-center p-6">Aquí se visualizarán las gráficas de Google Analytics <br/><span className="text-xs">(Próxima integración con API de Google)</span></p>
                 </div>
               </div>
@@ -189,13 +189,13 @@ export default function AdminPage() {
               <div className="flex bg-white p-1.5 rounded-2xl border shadow-sm w-full sm:w-fit overflow-x-auto no-scrollbar gap-1">
                 <button 
                   onClick={() => setGeneralView('content')} 
-                  className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-sm ${generalView === 'content' ? 'bg-primary text-secondary shadow-lg' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-sm whitespace-nowrap ${generalView === 'content' ? 'bg-primary text-secondary shadow-lg' : 'text-gray-500 hover:bg-gray-100'}`}
                 >
                   <Settings size={18} /> Contenido Web
                 </button>
                 <button 
                   onClick={() => setGeneralView('seo')} 
-                  className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-sm ${generalView === 'seo' ? 'bg-primary text-secondary shadow-lg' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-sm whitespace-nowrap ${generalView === 'seo' ? 'bg-primary text-secondary shadow-lg' : 'text-gray-500 hover:bg-gray-100'}`}
                 >
                   <Globe size={18} /> SEO & Metadatos
                 </button>
@@ -225,8 +225,8 @@ export default function AdminPage() {
 
               {generalView === 'seo' && (
                 <div className="bg-white p-8 rounded-3xl border shadow-sm w-full">
-                  <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-                     <h3 className="font-bold text-lg border-b pb-2 w-full sm:w-auto">Optimización SEO Global</h3>
+                  <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4">
+                     <h3 className="font-bold text-lg w-full sm:w-auto">Optimización SEO Global</h3>
                      <button onClick={handleGenSEO} disabled={loadingAI === 'seo'} className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-50 text-green-700 px-6 py-3 rounded-xl text-sm font-bold border border-green-200 hover:bg-green-100 transition-colors">
                         {loadingAI === 'seo' ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />} Sugerir con IA
                      </button>
@@ -247,27 +247,27 @@ export default function AdminPage() {
                 <h3 className="text-xl font-bold text-secondary">Gestión de Servicios</h3>
                 <button onClick={() => setContent({...content, services: [{ id: Date.now(), title: 'Nuevo Ecosistema', desc: '', imgUrl: '', icon: 'Cpu' }, ...content.services]})} className="bg-secondary text-white px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:bg-opacity-90 shadow-lg"><Plus size={18} /> Agregar Nuevo</button>
               </div>
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                 {content.services.map((s, i) => (
-                  <div key={s.id} className="bg-white p-6 rounded-3xl border flex flex-col sm:flex-row gap-6 relative shadow-sm group hover:border-primary/50 transition-all">
+                  <div key={s.id} className="bg-white p-8 rounded-3xl border flex flex-col md:flex-row gap-8 relative shadow-sm group hover:border-primary/50 transition-all">
                     <button onClick={() => setContent({...content, services: content.services.filter(srv => srv.id !== s.id)})} className="absolute top-4 right-4 text-red-300 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"><Trash2 size={20} /></button>
-                    <div className="shrink-0">
-                      <div className="w-44 h-44 bg-slate-50 rounded-2xl overflow-hidden border-2 border-slate-100">
+                    <div className="shrink-0 flex flex-col items-center">
+                      <div className="w-48 h-48 bg-slate-50 rounded-3xl overflow-hidden border-2 border-slate-100 shadow-inner">
                         <ImagePreview src={s.imgUrl} alt={s.title} fallbackIcon={UploadCloud} />
                       </div>
-                      <div className="mt-3 flex flex-col gap-2">
-                        <label className="cursor-pointer bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors"><UploadCloud size={14} /> Subir Foto<input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'services', url => { const items = [...content.services]; items[i].imgUrl = url; setContent({...content, services: items}); })} /></label>
-                        <button onClick={async () => { setLoadingAI(`desc-${s.id}`); const { description } = await generateServiceDescription({ title: s.title }); const items = [...content.services]; items[i].desc = description; setContent({...content, services: items}); setLoadingAI(null); }} disabled={loadingAI === `desc-${s.id}`} className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-blue-100 transition-colors">{loadingAI === `desc-${s.id}` ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} Generar Desc</button>
+                      <div className="mt-4 flex flex-col gap-2 w-full">
+                        <label className="cursor-pointer bg-slate-100 text-slate-700 px-4 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors"><UploadCloud size={14} /> Subir Foto<input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'services', url => { const items = [...content.services]; items[i].imgUrl = url; setContent({...content, services: items}); })} /></label>
+                        <button onClick={async () => { setLoadingAI(`desc-${s.id}`); const { description } = await generateServiceDescription({ title: s.title }); const items = [...content.services]; items[i].desc = description; setContent({...content, services: items}); setLoadingAI(null); }} disabled={loadingAI === `desc-${s.id}`} className="bg-blue-50 text-blue-700 px-4 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-blue-100 transition-colors">{loadingAI === `desc-${s.id}` ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} Generar Desc</button>
                       </div>
                     </div>
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-6">
                       <div>
                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nombre del Ecosistema</label>
-                        <input value={s.title} onChange={e => { const items = [...content.services]; items[i].title = e.target.value; setContent({...content, services: items}); }} className="w-full font-bold text-xl border-b-2 border-slate-100 py-2 outline-none focus:border-primary bg-transparent" placeholder="Ej: CCTV Avanzado" />
+                        <input value={s.title} onChange={e => { const items = [...content.services]; items[i].title = e.target.value; setContent({...content, services: items}); }} className="w-full font-bold text-2xl border-b-2 border-slate-100 py-2 outline-none focus:border-primary bg-transparent" placeholder="Ej: CCTV Avanzado" />
                       </div>
                       <div>
                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Descripción Comercial</label>
-                        <textarea value={s.desc} onChange={e => { const items = [...content.services]; items[i].desc = e.target.value; setContent({...content, services: items}); }} className="w-full text-sm border p-3 rounded-xl focus:ring-1 focus:ring-primary outline-none" rows={4} placeholder="Describe el impacto de este servicio..." />
+                        <textarea value={s.desc} onChange={e => { const items = [...content.services]; items[i].desc = e.target.value; setContent({...content, services: items}); }} className="w-full text-base border p-4 rounded-2xl focus:ring-1 focus:ring-primary outline-none leading-relaxed" rows={5} placeholder="Describe el impacto de este servicio..." />
                       </div>
                     </div>
                   </div>
@@ -282,15 +282,15 @@ export default function AdminPage() {
                 <h3 className="text-xl font-bold text-secondary">Aliados Estratégicos</h3>
                 <button onClick={() => setContent({...content, brands: [...content.brands, { id: Date.now(), name: 'Nueva Marca', url: '' }]})} className="bg-secondary text-white px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:bg-opacity-90 shadow-lg"><Plus size={18} /> Nueva Marca</button>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 {content.brands.map((b, i) => (
-                  <div key={b.id} className="bg-white p-6 rounded-2xl border relative flex flex-col items-center gap-4 shadow-sm group hover:border-primary/50 transition-all">
+                  <div key={b.id} className="bg-white p-6 rounded-3xl border relative flex flex-col items-center gap-4 shadow-sm group hover:border-primary/50 transition-all">
                     <button onClick={() => setContent({...content, brands: content.brands.filter(br => br.id !== b.id)})} className="absolute top-2 right-2 text-red-300 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"><Trash2 size={16}/></button>
-                    <div className="h-28 flex items-center justify-center p-4 bg-slate-50 w-full rounded-xl border border-slate-100 overflow-hidden">
+                    <div className="h-32 flex items-center justify-center p-6 bg-slate-50 w-full rounded-2xl border border-slate-100 overflow-hidden">
                       <BrandPreview src={b.url} name={b.name} />
                     </div>
-                    <input value={b.name} onChange={e => { const items = [...content.brands]; items[i].name = e.target.value; setContent({...content, brands: items}); }} className="w-full text-center font-bold text-xs p-2 border rounded-lg focus:ring-1 focus:ring-primary outline-none" />
-                    <label className="cursor-pointer bg-secondary text-white px-6 py-2 rounded-full text-[10px] font-bold hover:bg-opacity-90 transition-all w-full text-center">Subir Logo<input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'brands', url => { const items = [...content.brands]; items[i].url = url; setContent({...content, brands: items}); })} /></label>
+                    <input value={b.name} onChange={e => { const items = [...content.brands]; items[i].name = e.target.value; setContent({...content, brands: items}); }} className="w-full text-center font-bold text-xs p-3 border rounded-xl focus:ring-1 focus:ring-primary outline-none" />
+                    <label className="cursor-pointer bg-secondary text-white px-6 py-3 rounded-xl text-[10px] font-bold hover:bg-opacity-90 transition-all w-full text-center">Subir Logo<input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'brands', url => { const items = [...content.brands]; items[i].url = url; setContent({...content, brands: items}); })} /></label>
                   </div>
                 ))}
               </div>
