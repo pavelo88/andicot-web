@@ -14,7 +14,7 @@ export const Navbar = () => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     
-    // Sincronización inicial del estado del componente con la realidad del DOM
+    // Sincronizar el estado del componente con la clase del documento
     const isDark = document.documentElement.classList.contains('dark');
     setTheme(isDark ? 'dark' : 'light');
     
@@ -87,7 +87,6 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Menú Mobile Animado */}
       <div className={cn(
         "md:hidden absolute top-0 left-0 w-full h-screen bg-background transition-all duration-500 ease-in-out",
         isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"

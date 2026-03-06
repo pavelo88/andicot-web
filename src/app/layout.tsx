@@ -24,9 +24,10 @@ export default function RootLayout({
             (function() {
               try {
                 var theme = localStorage.getItem('theme');
-                // Forzamos dark por defecto si no hay nada guardado o si es 'dark'
+                // Si no hay preferencia guardada, usamos 'dark' (Modo Oscuro) por defecto
                 if (!theme || theme === 'dark') {
                   document.documentElement.classList.add('dark');
+                  localStorage.setItem('theme', 'dark');
                 } else {
                   document.documentElement.classList.remove('dark');
                 }
