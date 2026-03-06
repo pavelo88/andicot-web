@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { IconMapper } from '../icons/IconMapper';
 import { Service } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Search, Info, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Search, Info } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
 const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?: boolean }) => {
@@ -19,7 +18,7 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
   return (
     <div className={cn(
       "group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-500 hover:shadow-[0_15px_50px_rgba(164,200,81,0.15)] hover:border-primary/40 flex flex-col justify-end",
-      "h-[320px] md:h-[300px]",
+      "h-[280px] md:h-[300px]",
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[420px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
@@ -41,16 +40,16 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       </div>
       
       <div className="relative z-10 p-6 md:p-8">
-        <div className="w-12 h-12 rounded-2xl bg-secondary/80 border border-white/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl group-hover:rotate-6">
-          <IconMapper name={service.icon} size={22} />
+        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-secondary/80 border border-white/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl">
+          <IconMapper name={service.icon} size={20} />
         </div>
         <h3 className={cn(
           "font-headline font-bold mb-2 text-white transition-colors group-hover:text-primary leading-tight",
-          isLarge ? "text-2xl md:text-4xl" : "text-lg md:text-2xl"
+          isLarge ? "text-2xl md:text-4xl" : "text-lg md:text-xl"
         )}>
           {service.title}
         </h3>
-        <p className="text-gray-400 text-xs md:text-sm font-body italic line-clamp-2 opacity-80 group-hover:opacity-100 transition-all duration-500">
+        <p className="text-gray-400 text-[10px] md:text-sm font-body italic line-clamp-2 opacity-80">
           {service.desc}
         </p>
       </div>
@@ -60,6 +59,7 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
 
 export const ServiceGrid = ({ services }: { services: Service[] }) => {
   const [search, setSearch] = useState('');
+  const [api, setApi] = useState<CarouselApi>();
 
   const filteredServices = useMemo(() => {
     return services.filter(s => 
@@ -67,6 +67,17 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
       s.desc.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, services]);
+
+  // Autoplay logic for the carousel
+  useEffect(() => {
+    if (!api) return;
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [api]);
 
   return (
     <section id="soluciones" className="px-6 py-16 md:py-24 max-w-7xl mx-auto relative z-10 overflow-hidden">
@@ -85,32 +96,26 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
             <Search className="ml-4 text-primary/50 group-hover:text-primary transition-colors" size={20} />
             <input 
               type="text" 
-              placeholder="Buscar servicio... (CCTV, Redes, Energía)"
+              placeholder="Buscar servicio..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-gray-500 px-4 py-3 text-sm"
             />
-            {search && (
-              <button 
-                onClick={() => setSearch('')}
-                className="mr-2 p-2 text-gray-400 hover:text-white transition-colors"
-              >
-                Limpiar
-              </button>
-            )}
           </div>
-          {search && (
-            <p className="text-[10px] font-bold text-primary mt-3 uppercase tracking-widest animate-pulse">
-              Filtrando: {filteredServices.length} resultados
-            </p>
-          )}
         </div>
       </div>
 
-      {/* Vista Mobile: Carousel */}
+      {/* Vista Mobile: Carrusel Infinito y Automático */}
       <div className="md:hidden">
         {filteredServices.length > 0 ? (
-          <Carousel className="w-full max-w-sm mx-auto">
+          <Carousel 
+            setApi={setApi}
+            opts={{ 
+              loop: true,
+              align: "start"
+            }} 
+            className="w-full max-w-sm mx-auto"
+          >
             <CarouselContent className="-ml-4">
               {filteredServices.map((service) => (
                 <CarouselItem key={service.id} className="pl-4 basis-[85%]">
@@ -118,15 +123,11 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="flex justify-center gap-4 mt-8">
-               <CarouselPrevious className="relative translate-y-0 left-0 bg-secondary/50 border-white/10 hover:bg-primary hover:text-secondary h-12 w-12" />
-               <CarouselNext className="relative translate-y-0 right-0 bg-secondary/50 border-white/10 hover:bg-primary hover:text-secondary h-12 w-12" />
-            </div>
           </Carousel>
         ) : (
           <div className="text-center py-20 glass-card rounded-3xl border-dashed border-2 border-white/5">
             <Info className="mx-auto text-gray-600 mb-4" size={48} />
-            <p className="text-gray-500 font-bold uppercase text-xs tracking-[0.2em]">No se encontraron ecosistemas</p>
+            <p className="text-gray-500 font-bold uppercase text-xs tracking-[0.2em]">Sin resultados</p>
           </div>
         )}
       </div>
