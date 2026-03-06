@@ -7,6 +7,9 @@ import { cn } from '@/lib/utils';
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
   const [hasError, setHasError] = useState(false);
 
+  // Si no hay URL o hay error, mostramos el texto estilizado
+  const shouldShowText = !brand.url || hasError;
+
   return (
     <div 
       className={cn(
@@ -14,7 +17,7 @@ const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isAct
         isActive ? "scale-110" : "scale-90"
       )}
     >
-      {!hasError ? (
+      {!shouldShowText ? (
         <img 
           src={brand.url} 
           alt={brand.name} 
@@ -65,7 +68,11 @@ export const BrandCarousel = ({ brands }: { brands: SiteContent['brands'] }) => 
 
   if (!brands || brands.length === 0) return null;
 
-  const displayBrands = [...brands, ...brands, ...brands];
+  // Filtramos marcas que no tengan ni nombre ni url por seguridad
+  const validBrands = brands.filter(b => b.name || b.url);
+  if (validBrands.length === 0) return null;
+
+  const displayBrands = [...validBrands, ...validBrands, ...validBrands];
 
   return (
     <section className="py-12 md:py-20 bg-[#05060d] border-y border-white/5 relative z-10 overflow-hidden pointer-events-none">

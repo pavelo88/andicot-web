@@ -73,15 +73,20 @@ export default function AdminPage() {
   };
 
   const handleRestoreBrands = () => {
-    if (confirm('¿Deseas restaurar las marcas predeterminadas (incluyendo PELCO)? Esto no afectará las marcas que hayas añadido tú.')) {
-      // Combinar marcas actuales con las default que falten por ID
-      const currentIds = content.brands.map(b => b.id);
-      const missingDefaults = defaultBrands.filter(db => !currentIds.includes(db.id));
+    if (confirm('¿Deseas restaurar las marcas base (como PELCO) que falten en tu lista?')) {
+      const currentNames = content.brands.map(b => b.name.toUpperCase());
+      const missingDefaults = defaultBrands.filter(db => !currentNames.includes(db.name.toUpperCase()));
+      
+      if (missingDefaults.length === 0) {
+        alert('Todas las marcas base ya están presentes.');
+        return;
+      }
+
       setContent({
         ...content,
         brands: [...missingDefaults, ...content.brands]
       });
-      alert('Marcas base reincorporadas. Recuerda Publicar Cambios para guardar.');
+      alert(`Se han reincorporado ${missingDefaults.length} marcas. Recuerda Publicar Cambios.`);
     }
   };
 
