@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Globe, LayoutDashboard, Settings, BarChart3, TrendingUp, Users as UsersIcon, XCircle } from 'lucide-react';
+import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Globe, LayoutDashboard, Settings, BarChart3, TrendingUp, Users as UsersIcon, XCircle, RefreshCw } from 'lucide-react';
 import { doc, onSnapshot, setDoc, collection } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { SiteContent } from '@/lib/types';
-import { defaultSiteContent } from '@/lib/defaults';
+import { defaultSiteContent, defaultBrands } from '@/lib/defaults';
 import { Dashboard } from '@/components/admin/Dashboard';
 import { CRMLeads } from '@/components/admin/CRMLeads';
 import { generateSeoMetadata } from '@/ai/flows/generate-seo-metadata-flow';
@@ -72,8 +72,21 @@ export default function AdminPage() {
     }
   };
 
+  const handleRestoreBrands = () => {
+    if (confirm('¿Deseas restaurar las marcas predeterminadas (incluyendo PELCO)? Esto no afectará las marcas que hayas añadido tú.')) {
+      // Combinar marcas actuales con las default que falten por ID
+      const currentIds = content.brands.map(b => b.id);
+      const missingDefaults = defaultBrands.filter(db => !currentIds.includes(db.id));
+      setContent({
+        ...content,
+        brands: [...missingDefaults, ...content.brands]
+      });
+      alert('Marcas base reincorporadas. Recuerda Publicar Cambios para guardar.');
+    }
+  };
+
   const handleUpload = async (file: File, path: string, callback: (url: string) => void) => {
-    if (!storage) return alert('Firebase Storage no está configurado correctamente en el archivo .env');
+    if (!storage) return alert('Firebase Storage no está configurado correctamente');
     
     try {
       const fileRef = ref(storage, `site/${path}/${Date.now()}_${file.name}`);
@@ -82,13 +95,7 @@ export default function AdminPage() {
       callback(url);
     } catch (err: any) {
       console.error('Error en upload:', err);
-      if (err.code === 'storage/unauthorized') {
-        alert('Error: No tienes permisos para subir archivos. Revisa las reglas de seguridad de Firebase Storage.');
-      } else if (err.message.includes('CORS')) {
-        alert('Error de CORS: Debes configurar las políticas CORS en tu bucket de Firebase Storage para permitir subidas desde este dominio.');
-      } else {
-        alert('Error al subir la imagen: ' + (err.message || 'Error desconocido'));
-      }
+      alert('Error al subir la imagen. Verifica la configuración de CORS en Firebase Storage.');
     }
   };
 
@@ -250,7 +257,7 @@ export default function AdminPage() {
                         {s.imgUrl && (
                           <button 
                             onClick={() => { const items = [...content.services]; items[i].imgUrl = ''; setContent({...content, services: items}); }}
-                            className="absolute top-2 right-2 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute top-2 right-2 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                             title="Eliminar Imagen"
                           >
                             <XCircle size={16} />
@@ -281,8 +288,14 @@ export default function AdminPage() {
           {activeTab === 'brands' && (
             <div className="space-y-8">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold uppercase tracking-tighter">Partners & Alianzas</h3>
-                <button onClick={() => setContent({...content, brands: [{ id: Date.now(), name: 'Nueva Marca', url: '' }, ...content.brands]})} className="bg-primary text-secondary px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:opacity-90 shadow-lg"><Plus size={18} /> Nueva Alianza</button>
+                <div className="space-y-1">
+                  <h3 className="text-xl font-bold uppercase tracking-tighter">Partners & Alianzas</h3>
+                  <p className="text-xs text-muted-foreground">Gestiona los logos que aparecen en el carrusel principal.</p>
+                </div>
+                <div className="flex gap-4">
+                  <button onClick={handleRestoreBrands} className="bg-muted text-foreground px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:bg-primary/10 transition-all border border-border"><RefreshCw size={18} /> Restaurar Marcas</button>
+                  <button onClick={() => setContent({...content, brands: [{ id: Date.now(), name: 'Nueva Marca', url: '' }, ...content.brands]})} className="bg-primary text-secondary px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:opacity-90 shadow-lg"><Plus size={18} /> Nueva Alianza</button>
+                </div>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {content.brands.map((b, i) => (
@@ -293,7 +306,7 @@ export default function AdminPage() {
                       {b.url && (
                         <button 
                           onClick={() => { const items = [...content.brands]; items[i].url = ''; setContent({...content, brands: items}); }}
-                          className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
                           title="Eliminar Logo"
                         >
                           <XCircle size={12} />
