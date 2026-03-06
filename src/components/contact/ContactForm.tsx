@@ -43,10 +43,10 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           
           {/* COLUMNA IZQUIERDA: Info y Mapa */}
-          <div className="space-y-6 flex flex-col h-full">
-            <div className="glass-card rounded-3xl p-8 border-white/5 space-y-8">
+          <div className="space-y-6 flex flex-col">
+            <div className="glass-card rounded-3xl p-8 border-white/5 space-y-6">
               {/* CONTACTO RÁPIDO */}
-              <div className="flex flex-wrap items-center gap-10">
+              <div className="flex flex-wrap items-center gap-8">
                 <a href={`tel:${content.whatsappNumber}`} className="flex items-center gap-4 group">
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-secondary transition-all shadow-lg shadow-primary/5">
                     <Phone size={20} />
@@ -68,8 +68,8 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
                 </a>
               </div>
 
-              {/* MAPA (Altura reducida un 25%) */}
-              <div className="h-[300px] lg:h-[375px] rounded-2xl overflow-hidden border border-white/5 relative shadow-2xl">
+              {/* MAPA (Altura reducida un 10% adicional: 340px) */}
+              <div className="h-[270px] lg:h-[340px] rounded-2xl overflow-hidden border border-white/5 relative shadow-2xl">
                 <iframe 
                   src={content.mapUrl} 
                   width="100%" height="100%" style={{border:0}} loading="lazy" 
@@ -78,7 +78,7 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
               </div>
 
               {/* DIRECCIÓN */}
-              <div className="flex items-start gap-4 pt-4 border-t border-white/5 text-gray-400">
+              <div className="flex items-start gap-4 pt-2 text-gray-400">
                 <MapPin size={24} className="text-primary shrink-0" />
                 <div>
                   <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Base de Operaciones</p>
@@ -90,8 +90,8 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
 
           {/* COLUMNA DERECHA: Formulario Pro */}
           <div className="h-full">
-            <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8 md:p-10 border-white/5 h-full flex flex-col justify-between shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+            <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8 md:p-10 border-white/5 h-full flex flex-col justify-between shadow-2xl relative overflow-hidden group min-h-[500px]">
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
                 <Send size={120} className="text-primary" />
               </div>
 
@@ -139,7 +139,7 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
                     required 
                     value={formData.message} 
                     onChange={e => setFormData({...formData, message: e.target.value})} 
-                    className="flex-1 min-h-[150px] w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-white focus:border-primary/50 focus:bg-white/[0.05] outline-none transition-all placeholder:text-gray-600 resize-none" 
+                    className="flex-1 min-h-[120px] w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-white focus:border-primary/50 focus:bg-white/[0.05] outline-none transition-all placeholder:text-gray-600 resize-none" 
                     placeholder="Detalle su proyecto tecnológico..." 
                   />
                 </div>
