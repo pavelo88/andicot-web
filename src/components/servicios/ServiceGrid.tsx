@@ -22,17 +22,17 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[420px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#05060d] via-[#05060d]/70 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/60 to-transparent dark:from-[#05060d] dark:via-[#05060d]/70 dark:to-transparent z-10"></div>
         {!imgError ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
             onError={() => setImgError(true)}
-            className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-1000" 
+            className="w-full h-full object-cover opacity-60 dark:opacity-40 group-hover:opacity-80 dark:group-hover:opacity-60 group-hover:scale-110 transition-all duration-1000" 
           />
         ) : (
-          <div className="w-full h-full bg-secondary/20 flex items-center justify-center">
-            <div className="text-primary/5 scale-[6]">
+          <div className="w-full h-full bg-muted flex items-center justify-center">
+            <div className="text-primary/10 dark:text-primary/5 scale-[6]">
               <IconMapper name={service.icon} />
             </div>
           </div>
@@ -40,16 +40,16 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       </div>
       
       <div className="relative z-10 p-6 md:p-8">
-        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-secondary/80 border border-white/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl">
+        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-white dark:bg-secondary/80 border border-border flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-md">
           <IconMapper name={service.icon} size={20} />
         </div>
         <h3 className={cn(
-          "font-headline font-bold mb-2 text-white transition-colors group-hover:text-primary leading-tight",
+          "font-headline font-bold mb-2 text-foreground transition-colors group-hover:text-primary leading-tight",
           isLarge ? "text-2xl md:text-4xl" : "text-lg md:text-xl"
         )}>
           {service.title}
         </h3>
-        <p className="text-gray-400 text-[10px] md:text-sm font-body italic line-clamp-2 opacity-80">
+        <p className="text-muted-foreground text-[10px] md:text-sm font-body italic line-clamp-2 opacity-80">
           {service.desc}
         </p>
       </div>
@@ -82,20 +82,20 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
            <span className="text-[10px] font-bold tracking-[0.4em] text-primary uppercase">Portfolio Tecnológico</span>
         </div>
-        <h2 className="text-3xl md:text-6xl font-headline font-bold mb-6 text-white tracking-tight">
+        <h2 className="text-3xl md:text-6xl font-headline font-bold mb-6 text-foreground tracking-tight">
           Nuestros <span className="text-primary">Ecosistemas</span>
         </h2>
         
         <div className="max-w-md mx-auto relative group mt-8">
           <div className="absolute inset-0 bg-primary/10 blur-xl group-hover:bg-primary/20 transition-all duration-500 rounded-full" />
-          <div className="relative flex items-center bg-secondary/50 backdrop-blur-md border border-white/10 rounded-2xl p-1 shadow-2xl">
+          <div className="relative flex items-center bg-background/50 backdrop-blur-md border border-border rounded-2xl p-1 shadow-xl">
             <Search className="ml-4 text-primary/50 group-hover:text-primary transition-colors" size={20} />
             <input 
               type="text" 
               placeholder="Buscar servicio..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-gray-500 px-4 py-3 text-sm"
+              className="w-full bg-transparent border-none focus:ring-0 text-foreground placeholder:text-muted-foreground px-4 py-3 text-sm"
             />
           </div>
         </div>
@@ -117,9 +117,9 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
             </CarouselContent>
           </Carousel>
         ) : (
-          <div className="text-center py-20 glass-card rounded-3xl border-dashed border-2 border-white/5">
-            <Info className="mx-auto text-gray-600 mb-4" size={48} />
-            <p className="text-gray-500 font-bold uppercase text-xs tracking-[0.2em]">Sin resultados</p>
+          <div className="text-center py-20 glass-card rounded-3xl border-dashed border-2 border-border">
+            <Info className="mx-auto text-muted-foreground mb-4" size={48} />
+            <p className="text-muted-foreground font-bold uppercase text-xs tracking-[0.2em]">Sin resultados</p>
           </div>
         )}
       </div>
@@ -135,7 +135,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
           ))
         ) : (
           <div className="col-span-full text-center py-20 glass-card rounded-3xl">
-             <p className="text-gray-500 font-bold">No hay resultados para "{search}"</p>
+             <p className="text-muted-foreground font-bold">No hay resultados para "{search}"</p>
           </div>
         )}
       </div>
