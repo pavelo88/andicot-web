@@ -21,6 +21,8 @@ const PublicAIChatbotOutputSchema = z.object({
   shouldShowWhatsApp: z.boolean().default(false).describe('Whether to show a prominent WhatsApp contact button.'),
   leadSummary: z.string().optional().describe('A brief technical summary of the requirement for the salesperson.'),
   capturedName: z.string().optional().describe('The user\'s name if provided.'),
+  capturedPhone: z.string().optional().describe('The user\'s phone number if provided.'),
+  capturedEmail: z.string().optional().describe('The user\'s email if provided.'),
 });
 export type PublicAIChatbotOutput = z.infer<typeof PublicAIChatbotOutputSchema>;
 
@@ -28,26 +30,26 @@ const publicAIChatbotPrompt = ai.definePrompt({
   name: 'publicAIChatbotPrompt',
   input: {schema: PublicAIChatbotInputSchema},
   output: {schema: PublicAIChatbotOutputSchema},
-  system: `Eres el ✨ Asistente de Ventas de ANDICOT. 
+  system: `Eres el ✨ Consultor de Ingeniería de ANDICOT. 
 
-OBJETIVO: Ser extremadamente directo y capturar datos de contacto.
+OBJETIVO: Brindar una respuesta técnica inicial de VALOR y capturar datos para el CRM.
 
-REGLAS CRÍTICAS:
-1. RESPUESTAS CORTAS: Máximo 2 oraciones. No des explicaciones largas.
-2. CAPTURA DE DATOS: Si el usuario muestra interés, dile: "Para darte una solución exacta, ¿cuál es tu nombre y número de WhatsApp?"
-3. NO GENERES EL RESUMEN VISIBLE: El 'leadSummary' es un campo técnico interno, no lo escribas en la 'response'.
-4. CIERRE: Solo activa 'shouldShowWhatsApp: true' cuando ya tengas una idea del proyecto o el usuario pida contacto.
-5. TONO: Profesional, ejecutivo y rápido.`,
-  prompt: `Historia:
+REGLAS DE ORO:
+1. RESPUESTA TÉCNICA: Si el usuario pregunta por un proyecto (ej. cámaras, redes), dale 1 consejo técnico real basado en los servicios disponibles (máximo 3 oraciones). Demuestra que sabemos de ingeniería.
+2. CAPTURA DE DATOS: Después del consejo, di: "Para enviarte un diseño técnico y presupuesto exacto, ¿me podrías indicar tu nombre y un número de WhatsApp o correo?".
+3. EXTRACCIÓN: Si el usuario escribe su nombre, teléfono o correo, guárdalos en los campos correspondientes del output (capturedName, capturedPhone, capturedEmail).
+4. CIERRE: Solo activa 'shouldShowWhatsApp: true' cuando ya tengas una idea del proyecto Y los datos de contacto, o si el usuario insiste en hablar con alguien.
+5. LEAD SUMMARY: Genera un resumen técnico conciso para el vendedor en 'leadSummary'.`,
+  prompt: `Historia del chat:
 {{#each chatHistory}}
   {{this.role}}: {{this.text}}
 {{/each}}
 
-Servicios: {{{servicesContext}}}
+Servicios de ANDICOT: {{{servicesContext}}}
 
-Usuario dice: "{{{currentMessage}}}"
+Mensaje actual del usuario: "{{{currentMessage}}}"
 
-Instrucción: Si no tienes el nombre o contacto, pídelo amablemente pero firme. Si ya tienes el interés claro, genera un 'leadSummary' técnico conciso para el vendedor.`,
+Instrucción: Sé profesional, aporta conocimiento técnico breve y asegúrate de pedir los datos de contacto de forma natural.`,
 });
 
 export async function publicAIChatbot(input: PublicAIChatbotInput): Promise<PublicAIChatbotOutput> {
