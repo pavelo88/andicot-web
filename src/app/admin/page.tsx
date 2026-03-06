@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Search, Menu, LayoutDashboard, Settings } from 'lucide-react';
+import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Search, Menu, LayoutDashboard, Settings, Globe } from 'lucide-react';
 import { doc, onSnapshot, setDoc, collection } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -11,23 +11,25 @@ import { Dashboard } from '@/components/admin/Dashboard';
 import { CRMLeads } from '@/components/admin/CRMLeads';
 import { generateSeoMetadata } from '@/ai/flows/generate-seo-metadata-flow';
 import { generateServiceDescription } from '@/ai/flows/generate-service-description-flow';
-import { generateSocialMediaPost } from '@/ai/flows/generate-social-media-post-flow';
 
 export default function AdminPage() {
   const [isLogged, setIsLogged] = useState(false);
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('general');
-  const [generalView, setGeneralView] = useState<'metrics' | 'content'>('metrics');
+  const [generalView, setGeneralView] = useState<'metrics' | 'content' | 'seo'>('metrics');
   
   const [content, setContent] = useState<SiteContent>(defaultSiteContent);
   const [leadsCount, setLeadsCount] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
-  const [seoResult, setSeoResult] = useState<any>(null);
   const [loadingAI, setLoadingAI] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubContent = onSnapshot(doc(db, 'config', 'siteContent'), (snapshot) => {
-      if (snapshot.exists()) setContent(snapshot.data() as SiteContent);
+      if (snapshot.exists()) {
+        const data = snapshot.data() as SiteContent;
+        // Merge with defaults to ensure all fields (like SEO) exist
+        setContent({ ...defaultSiteContent, ...data });
+      }
     });
 
     const unsubLeads = onSnapshot(collection(db, 'leads'), (snapshot) => {
@@ -75,7 +77,14 @@ export default function AdminPage() {
     setLoadingAI('seo');
     try {
       const res = await generateSeoMetadata({ heroTitle: content.heroTitle, heroSubtitle: content.heroSubtitle });
-      setSeoResult(res);
+      setContent({
+        ...content,
+        seo: {
+          ...content.seo,
+          description: res.metaDescription,
+          keywords: res.keywords.join(', ')
+        }
+      });
     } finally {
       setLoadingAI(null);
     }
@@ -121,52 +130,39 @@ export default function AdminPage() {
           {activeTab === 'general' && (
             <div className="max-w-5xl mx-auto space-y-8">
               
-              <div className="flex bg-white p-2 rounded-xl border shadow-sm mb-6 w-full md:w-fit">
+              <div className="flex bg-white p-2 rounded-xl border shadow-sm mb-6 w-full overflow-x-auto no-scrollbar">
                 <button 
                   onClick={() => setGeneralView('metrics')}
-                  className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'metrics' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`flex-shrink-0 flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'metrics' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
                 >
-                  <Cpu size={18} /> Métricas y Visitas
+                  <LayoutDashboard size={18} /> Métricas
                 </button>
                 <button 
                   onClick={() => setGeneralView('content')}
-                  className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'content' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`flex-shrink-0 flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'content' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
                 >
-                  <Settings size={18} /> Editar Web
+                  <Settings size={18} /> Contenido
+                </button>
+                <button 
+                  onClick={() => setGeneralView('seo')}
+                  className={`flex-shrink-0 flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${generalView === 'seo' ? 'bg-primary text-secondary shadow' : 'text-gray-500 hover:bg-gray-100'}`}
+                >
+                  <Globe size={18} /> SEO & Metadatos
                 </button>
               </div>
 
               {generalView === 'metrics' && (
                 <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <LayoutDashboard className="text-primary" /> Rendimiento de la Página
-                  </h2>
+                  <h2 className="text-2xl font-bold mb-6">Métricas de Rendimiento</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between">
-                      <p className="text-sm text-gray-500 font-medium">Usuarios Activos (30 min)</p>
+                    <div className="bg-white p-6 rounded-2xl border shadow-sm">
+                      <p className="text-sm text-gray-500 font-medium">Usuarios Activos</p>
                       <p className="text-4xl font-bold text-primary mt-2">0</p>
-                      <span className="text-xs text-green-500 mt-2 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Firebase Analytics
-                      </span>
                     </div>
-                    
-                    <div className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between">
-                      <p className="text-sm text-gray-500 font-medium">Registros (Firebase Auth)</p>
-                      <p className="text-4xl font-bold text-slate-800 mt-2">--</p>
-                      <span className="text-xs text-slate-400 mt-2">Cuentas creadas</span>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between">
+                    <div className="bg-white p-6 rounded-2xl border shadow-sm">
                       <p className="text-sm text-gray-500 font-medium">Leads Registrados</p>
                       <p className="text-4xl font-bold text-orange-500 mt-2">{leadsCount}</p>
-                      <span className="text-xs text-slate-400 mt-2">En base de datos real</span>
                     </div>
-                  </div>
-                  
-                  <div className="bg-white p-6 rounded-2xl border shadow-sm h-64 flex flex-col items-center justify-center text-center">
-                     <Loader2 className="animate-spin text-gray-300 mb-2" size={32} />
-                     <p className="text-gray-400 font-medium mt-2">Gráfico de visitas a la página</p>
-                     <p className="text-sm text-gray-400 italic max-w-md mt-2">Aquí conectaremos los datos de Google Analytics para ver la curva de visitantes de los últimos 28 días.</p>
                   </div>
                 </section>
               )}
@@ -174,29 +170,23 @@ export default function AdminPage() {
               {generalView === 'content' && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="bg-white p-8 rounded-2xl border shadow-sm">
-                    <h3 className="font-bold text-lg mb-4 border-b pb-2">Sección Hero</h3>
+                    <h3 className="font-bold text-lg mb-4 border-b pb-2">Sección Principal (Hero)</h3>
                     <div className="space-y-4">
-                      <input value={content.heroTitle} onChange={e => setContent({...content, heroTitle: e.target.value})} className="w-full border p-2 rounded" placeholder="Título Hero" />
-                      <textarea value={content.heroSubtitle} onChange={e => setContent({...content, heroSubtitle: e.target.value})} className="w-full border p-2 rounded" rows={3} placeholder="Subtítulo Hero" />
-                      <div className="flex flex-col sm:flex-row gap-2">
-                        <input value={content.heroMediaUrl} readOnly className="flex-1 bg-gray-50 border p-2 rounded text-xs" />
-                        <label className="cursor-pointer bg-secondary text-white p-2 rounded flex items-center justify-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 hover:bg-opacity-90 transition-colors">
-                          <UploadCloud size={16} /> Subir
-                          <input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'hero', url => setContent({...content, heroMediaUrl: url}))} />
-                        </label>
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">Título</label>
+                        <input value={content.heroTitle} onChange={e => setContent({...content, heroTitle: e.target.value})} className="w-full border p-2 rounded mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">Subtítulo</label>
+                        <textarea value={content.heroSubtitle} onChange={e => setContent({...content, heroSubtitle: e.target.value})} className="w-full border p-2 rounded mt-1" rows={3} />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">Botón de Llamado a la Acción</label>
+                        <input value={content.ctaText} onChange={e => setContent({...content, ctaText: e.target.value})} className="w-full border p-2 rounded mt-1" />
                       </div>
                     </div>
-                    <button onClick={handleGenSEO} disabled={loadingAI === 'seo'} className="mt-6 flex items-center justify-center sm:justify-start gap-2 bg-green-50 text-green-700 px-4 py-2 rounded text-sm font-bold border border-green-200 w-full sm:w-auto hover:bg-green-100 transition-colors">
-                      {loadingAI === 'seo' ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />} Sugerir SEO con IA
-                    </button>
-                    {seoResult && (
-                      <div className="mt-4 p-4 bg-gray-50 border rounded text-xs">
-                        <p><strong>Desc:</strong> {seoResult.metaDescription}</p>
-                        <p className="mt-2"><strong>Keywords:</strong> {seoResult.keywords.join(', ')}</p>
-                      </div>
-                    )}
                   </div>
-                  
+
                   <div className="bg-white p-8 rounded-2xl border shadow-sm">
                     <h3 className="font-bold text-lg mb-4 border-b pb-2">Estadísticas Públicas</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -214,6 +204,71 @@ export default function AdminPage() {
                   </div>
                 </div>
               )}
+
+              {generalView === 'seo' && (
+                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="bg-white p-8 rounded-2xl border shadow-sm">
+                    <div className="flex items-center justify-between mb-6">
+                       <h3 className="font-bold text-lg border-b pb-2">Optimización SEO Global</h3>
+                       <button onClick={handleGenSEO} disabled={loadingAI === 'seo'} className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded text-sm font-bold border border-green-200 hover:bg-green-100 transition-colors">
+                          {loadingAI === 'seo' ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />} Generar con IA
+                       </button>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Meta Título (Pestaña del navegador)</label>
+                        <input 
+                          value={content.seo.title} 
+                          onChange={e => setContent({...content, seo: {...content.seo, title: e.target.value}})} 
+                          className="w-full border p-3 rounded-lg focus:ring-1 focus:ring-primary outline-none" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Meta Descripción (Resultados de búsqueda)</label>
+                        <textarea 
+                          value={content.seo.description} 
+                          onChange={e => setContent({...content, seo: {...content.seo, description: e.target.value}})} 
+                          className="w-full border p-3 rounded-lg focus:ring-1 focus:ring-primary outline-none" 
+                          rows={4}
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1">Recomendado: 150-160 caracteres.</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Palabras Clave (Separadas por comas)</label>
+                        <textarea 
+                          value={content.seo.keywords} 
+                          onChange={e => setContent({...content, seo: {...content.seo, keywords: e.target.value}})} 
+                          className="w-full border p-3 rounded-lg focus:ring-1 focus:ring-primary outline-none" 
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-8 rounded-2xl border shadow-sm">
+                    <h3 className="font-bold text-lg mb-4 border-b pb-2">Información de Contacto & Redes</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">WhatsApp (Formato internacional)</label>
+                        <input value={content.whatsappNumber} onChange={e => setContent({...content, whatsappNumber: e.target.value})} className="w-full border p-2 rounded mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">Dirección Física</label>
+                        <input value={content.address} onChange={e => setContent({...content, address: e.target.value})} className="w-full border p-2 rounded mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">Link Facebook</label>
+                        <input value={content.socialUrls.facebook} onChange={e => setContent({...content, socialUrls: {...content.socialUrls, facebook: e.target.value}})} className="w-full border p-2 rounded mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase">Link Instagram</label>
+                        <input value={content.socialUrls.instagram} onChange={e => setContent({...content, socialUrls: {...content.socialUrls, instagram: e.target.value}})} className="w-full border p-2 rounded mt-1" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -223,10 +278,12 @@ export default function AdminPage() {
                 <Plus size={16} /> Nuevo
               </button>
               {content.services.map((s, i) => (
-                <div key={s.id} className="bg-white p-6 rounded-2xl border flex flex-col md:flex-row gap-6 relative shadow-sm hover:shadow-md transition-shadow">
+                <div key={s.id} className="bg-white p-6 rounded-2xl border flex flex-col md:flex-row gap-6 relative shadow-sm">
                   <button onClick={() => setContent({...content, services: content.services.filter(srv => srv.id !== s.id)})} className="absolute top-4 right-4 text-red-400 hover:text-red-600 transition-colors"><Trash2 size={18} /></button>
-                  <div className="w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden border shrink-0">
-                    {s.imgUrl ? <img src={s.imgUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400"><UploadCloud size={32}/></div>}
+                  <div className="shrink-0">
+                    <div className="w-40 h-40 bg-gray-100 rounded-xl overflow-hidden border">
+                      {s.imgUrl ? <img src={s.imgUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400"><UploadCloud size={32}/></div>}
+                    </div>
                   </div>
                   <div className="flex-1 space-y-3">
                     <input value={s.title} onChange={e => {
@@ -250,7 +307,7 @@ export default function AdminPage() {
                           setLoadingAI(null);
                         }}
                         disabled={loadingAI === `desc-${s.id}`}
-                        className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-100 transition-colors disabled:opacity-50"
+                        className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-100 transition-colors"
                       >
                         {loadingAI === `desc-${s.id}` ? <Loader2 size={14} className="animate-spin inline" /> : '✨ Desc IA'}
                       </button>
@@ -268,7 +325,7 @@ export default function AdminPage() {
               </button>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {content.brands.map((b, i) => (
-                  <div key={b.id} className="bg-white p-4 rounded-xl border relative flex flex-col items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                  <div key={b.id} className="bg-white p-4 rounded-xl border relative flex flex-col items-center gap-4 shadow-sm">
                     <button onClick={() => setContent({...content, brands: content.brands.filter(br => br.id !== b.id)})} className="absolute top-2 right-2 text-red-300 hover:text-red-600 transition-colors"><Trash2 size={16}/></button>
                     <div className="h-24 flex items-center justify-center p-4 bg-gray-50 w-full rounded border">
                       <img src={b.url} className="max-h-full object-contain" />
@@ -277,7 +334,7 @@ export default function AdminPage() {
                        const items = [...content.brands]; items[i].name = e.target.value; setContent({...content, brands: items});
                     }} className="w-full text-center font-bold text-xs p-1 border rounded" />
                     <label className="cursor-pointer bg-secondary text-white px-4 py-1.5 rounded-full text-[10px] font-bold hover:bg-opacity-90 transition-colors">
-                      Sustituir Logo
+                      Logo
                       <input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'brands', url => {
                          const items = [...content.brands]; items[i].url = url; setContent({...content, brands: items});
                       })} />

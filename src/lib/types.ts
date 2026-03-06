@@ -44,6 +44,13 @@ export interface SiteContent {
     instagram: string;
     linkedin: string;
   };
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+    author?: string;
+    ogImage?: string;
+  };
   services: Service[];
   stats: Stat[];
   brands: Brand[];

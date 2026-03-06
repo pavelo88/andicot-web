@@ -1,9 +1,11 @@
 import type {Metadata} from 'next';
 import './globals.css';
+import { defaultSiteContent } from '@/lib/defaults';
 
 export const metadata: Metadata = {
-  title: 'ANDICOT Digital | Ingeniería y Tecnología',
-  description: 'Análisis, Diseño y Construcción Tecnológica con estándares de nivel empresarial.',
+  title: defaultSiteContent.seo.title,
+  description: defaultSiteContent.seo.description,
+  keywords: defaultSiteContent.seo.keywords,
 };
 
 export default function RootLayout({
