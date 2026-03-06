@@ -24,7 +24,7 @@ export default function RootLayout({
             (function() {
               try {
                 var theme = localStorage.getItem('theme');
-                // Si no hay tema guardado, forzamos dark. Si hay uno guardado, respetamos la elección.
+                // Si no hay tema guardado, forzamos dark por defecto.
                 if (!theme || theme === 'dark') {
                   document.documentElement.classList.add('dark');
                 } else {
@@ -35,7 +35,7 @@ export default function RootLayout({
           `,
         }} />
       </head>
-      <body className="font-body antialiased bg-background text-foreground">
+      <body className="font-body antialiased bg-background text-foreground transition-colors duration-500">
         {children}
       </body>
     </html>
