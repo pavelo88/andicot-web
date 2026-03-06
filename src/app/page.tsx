@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -27,11 +28,14 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-background transition-colors duration-500">
-      {/* Background Layer with opacity for Light Mode compatibility */}
+      {/* Background Layer - Increased visibility for Light and Dark modes */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')] opacity-10 dark:opacity-20 mix-blend-luminosity bg-cover" />
+        <div 
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')] opacity-30 dark:opacity-40 bg-cover bg-center" 
+          style={{ mixBlendMode: 'overlay' }}
+        />
         <div className="absolute inset-0 tech-grid-bg" />
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/10 dark:bg-primary/10 blur-[150px] rounded-full" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 dark:bg-primary/10 blur-[150px] rounded-full" />
       </div>
 
       <Navbar />
