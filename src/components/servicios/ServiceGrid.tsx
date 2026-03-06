@@ -18,7 +18,7 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
   return (
     <div className={cn(
       "group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-500 hover:shadow-[0_15px_50px_rgba(164,200,81,0.15)] hover:border-primary/40 flex flex-col justify-end",
-      "h-[280px] md:h-[300px]",
+      "h-[260px]",
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[420px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
@@ -68,14 +68,11 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
     );
   }, [search, services]);
 
-  // Autoplay logic for the carousel
   useEffect(() => {
     if (!api) return;
-
     const interval = setInterval(() => {
       api.scrollNext();
     }, 4000);
-
     return () => clearInterval(interval);
   }, [api]);
 
@@ -89,7 +86,6 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
           Nuestros <span className="text-primary">Ecosistemas</span>
         </h2>
         
-        {/* Buscador Tech */}
         <div className="max-w-md mx-auto relative group mt-8">
           <div className="absolute inset-0 bg-primary/10 blur-xl group-hover:bg-primary/20 transition-all duration-500 rounded-full" />
           <div className="relative flex items-center bg-secondary/50 backdrop-blur-md border border-white/10 rounded-2xl p-1 shadow-2xl">
@@ -105,15 +101,11 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         </div>
       </div>
 
-      {/* Vista Mobile: Carrusel Infinito y Automático */}
       <div className="md:hidden">
         {filteredServices.length > 0 ? (
           <Carousel 
             setApi={setApi}
-            opts={{ 
-              loop: true,
-              align: "start"
-            }} 
+            opts={{ loop: true, align: "start" }} 
             className="w-full max-w-sm mx-auto"
           >
             <CarouselContent className="-ml-4">
@@ -132,7 +124,6 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         )}
       </div>
 
-      {/* Vista Desktop: Grid con buscador */}
       <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
         {filteredServices.length > 0 ? (
           filteredServices.map((service, index) => (
