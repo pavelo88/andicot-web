@@ -98,8 +98,8 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
             <div className="flex items-center gap-2">
               <Bot size={20} className="text-primary" />
               <div>
-                <h3 className="font-bold text-[10px] uppercase tracking-widest leading-none">Ingeniería ANDICOT</h3>
-                <p className="text-[8px] text-primary/70 uppercase font-black mt-1">Soporte IA 24/7</p>
+                <h3 className="font-bold text-[10px] uppercase tracking-widest leading-none">Consultoría ANDICOT</h3>
+                <p className="text-[8px] text-primary/70 uppercase font-black mt-1">Ingeniería IA 24/7</p>
               </div>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white"><X size={18} /></button>
@@ -115,7 +115,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
                   <div className="mt-3 flex flex-col items-start gap-2 animate-in fade-in zoom-in-95">
                     {hasSavedLead && (
                       <div className="flex items-center gap-1.5 text-[10px] text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full border border-green-200">
-                        <CheckCircle2 size={10} /> Requerimiento registrado en CRM
+                        <CheckCircle2 size={10} /> Proyecto registrado en CRM
                       </div>
                     )}
                     <a 
@@ -123,7 +123,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
                       target="_blank"
                       className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-2.5 rounded-full text-xs font-bold hover:scale-105 transition-transform shadow-lg"
                     >
-                      <Phone size={14} /> Hablar con un Ingeniero
+                      <Phone size={14} /> Solicitar Visita Técnica
                     </a>
                   </div>
                 )}
@@ -132,7 +132,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 flex items-center gap-2 text-xs rounded-tl-none shadow-sm">
-                  <Loader2 size={12} className="animate-spin text-primary" /> Analizando tu requerimiento...
+                  <Loader2 size={12} className="animate-spin text-primary" /> Analizando requerimiento técnico...
                 </div>
               </div>
             )}
@@ -144,7 +144,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
               type="text" 
               value={input} 
               onChange={e => setInput(e.target.value)} 
-              placeholder="Ej: Necesito cámaras para mi galpón..." 
+              placeholder="Ej: Necesito seguridad para mi local..." 
               className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm outline-none focus:ring-1 focus:ring-primary text-gray-800" 
             />
             <button type="submit" disabled={isLoading || !input.trim()} className="bg-secondary text-white p-2 rounded-full hover:bg-opacity-90 disabled:opacity-50">
@@ -158,7 +158,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
         className="bg-secondary text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all flex items-center gap-2 group border border-primary/20"
       >
         <Sparkles size={24} className="text-primary" />
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-sm hidden md:inline-block">Consultar IA</span>
+        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-sm hidden md:inline-block">Consultoría IA</span>
       </button>
     </div>
   );
