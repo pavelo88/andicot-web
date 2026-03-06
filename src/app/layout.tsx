@@ -24,7 +24,8 @@ export default function RootLayout({
             (function() {
               try {
                 var theme = localStorage.getItem('theme');
-                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                // Si no hay tema guardado, forzamos dark. Si hay uno guardado, respetamos la elección.
+                if (!theme || theme === 'dark') {
                   document.documentElement.classList.add('dark');
                 } else {
                   document.documentElement.classList.remove('dark');
