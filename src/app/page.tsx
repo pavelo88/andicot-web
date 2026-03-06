@@ -28,14 +28,15 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-background transition-colors duration-500">
-      {/* Background Layer - Increased visibility for Light and Dark modes */}
+      {/* Capa de Fondo - Limpia y Tecnológica */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Solo mostramos la imagen en modo oscuro para profundidad, en claro dejamos el blanco puro con grid */}
         <div 
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')] opacity-30 dark:opacity-40 bg-cover bg-center" 
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')] opacity-0 dark:opacity-30 bg-cover bg-center transition-opacity duration-700" 
           style={{ mixBlendMode: 'overlay' }}
         />
         <div className="absolute inset-0 tech-grid-bg" />
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 dark:bg-primary/10 blur-[150px] rounded-full" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/10 dark:bg-primary/5 blur-[150px] rounded-full" />
       </div>
 
       <Navbar />

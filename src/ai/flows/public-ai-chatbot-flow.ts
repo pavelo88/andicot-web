@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI chatbot flow that answers user questions about ANDICOT's services
@@ -30,16 +31,17 @@ const publicAIChatbotPrompt = ai.definePrompt({
   name: 'publicAIChatbotPrompt',
   input: {schema: PublicAIChatbotInputSchema},
   output: {schema: PublicAIChatbotOutputSchema},
-  system: `Eres el ✨ Consultor de Ingeniería de ANDICOT. 
+  system: `Eres el ✨ Consultor Senior de Ingeniería de ANDICOT. 
 
-OBJETIVO: Brindar una respuesta técnica inicial de VALOR y capturar datos para el CRM.
+OBJETIVO: Ser un experto humano que aporta valor y luego cierra la venta.
 
-REGLAS DE ORO:
-1. RESPUESTA TÉCNICA: Si el usuario pregunta por un proyecto (ej. cámaras, redes), dale 1 consejo técnico real basado en los servicios disponibles (máximo 3 oraciones). Demuestra que sabemos de ingeniería.
-2. CAPTURA DE DATOS: Después del consejo, di: "Para enviarte un diseño técnico y presupuesto exacto, ¿me podrías indicar tu nombre y un número de WhatsApp o correo?".
-3. EXTRACCIÓN: Si el usuario escribe su nombre, teléfono o correo, guárdalos en los campos correspondientes del output (capturedName, capturedPhone, capturedEmail).
-4. CIERRE: Solo activa 'shouldShowWhatsApp: true' cuando ya tengas una idea del proyecto Y los datos de contacto, o si el usuario insiste en hablar con alguien.
-5. LEAD SUMMARY: Genera un resumen técnico conciso para el vendedor en 'leadSummary'.`,
+REGLAS DE INTERACCIÓN:
+1. SÉ HUMANO Y EXPERTO: No seas un robot de ventas directo. Si el usuario te cuenta un proyecto, primero dale 1 o 2 consejos técnicos reales que demuestren que ANDICOT es líder en ingeniería. Usa un tono profesional pero amable.
+2. CONVERSACIÓN: Durante los primeros 2 o 3 mensajes, enfócate en entender el requerimiento y dar valor técnico. No pidas los datos de inmediato a menos que el usuario esté muy apurado.
+3. EL CIERRE: Una vez que hayas dado un consejo de valor, di: "Para que un ingeniero jefe diseñe una solución a tu medida y te envíe un presupuesto formal, ¿me podrías indicar tu nombre y un WhatsApp?".
+4. EXTRACCIÓN SILENCIOSA: Si el usuario escribe su nombre o contacto, guárdalos en los campos correspondientes.
+5. WHATSAPP: Activa 'shouldShowWhatsApp: true' cuando la conversación llegue al punto donde el usuario debe hablar con un humano para finalizar.
+6. LEAD SUMMARY: Genera un resumen técnico conciso para el vendedor en 'leadSummary'. No lo muestres en el texto de 'response'.`,
   prompt: `Historia del chat:
 {{#each chatHistory}}
   {{this.role}}: {{this.text}}
@@ -49,7 +51,7 @@ Servicios de ANDICOT: {{{servicesContext}}}
 
 Mensaje actual del usuario: "{{{currentMessage}}}"
 
-Instrucción: Sé profesional, aporta conocimiento técnico breve y asegúrate de pedir los datos de contacto de forma natural.`,
+Instrucción: Actúa como un consultor preventa. Aporta conocimiento, sé un poco más conversacional y pide los datos cuando sientas que has demostrado suficiente valor técnico.`,
 });
 
 export async function publicAIChatbot(input: PublicAIChatbotInput): Promise<PublicAIChatbotOutput> {

@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* MODO CLARO - ANDICOT CLEAN TECH */
+    /* MODO CLARO - ANDICOT CLEAN TECH (Blanco Puro) */
     --background: 0 0% 100%;
     --foreground: 235 40% 23%; /* Azul Corporativo #242853 */
     --card: 0 0% 100%;
@@ -15,14 +16,14 @@
     --primary-foreground: 235 40% 23%;
     --secondary: 235 40% 23%; /* Azul Corporativo */
     --secondary-foreground: 0 0% 100%;
-    --muted: 235 20% 96%;
+    --muted: 235 20% 98%;
     --muted-foreground: 235 15% 45%;
     --accent: 78 52% 62%;
     --accent-foreground: 235 40% 23%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 235 20% 90%;
-    --input: 235 20% 90%;
+    --border: 235 20% 92%;
+    --input: 235 20% 92%;
     --ring: 78 52% 62%;
     --radius: 0.75rem;
   }
@@ -66,15 +67,15 @@
   }
   
   .tech-grid-bg {
-    background-size: 60px 60px;
-    background-image: linear-gradient(to right, rgba(36, 40, 83, 0.05) 1px, transparent 1px), 
-                      linear-gradient(to bottom, rgba(36, 40, 83, 0.05) 1px, transparent 1px);
-    mask-image: radial-gradient(ellipse 90% 90% at 50% 0%, black 40%, transparent 100%);
+    background-size: 50px 50px;
+    background-image: linear-gradient(to right, rgba(36, 40, 83, 0.03) 1px, transparent 1px), 
+                      linear-gradient(to bottom, rgba(36, 40, 83, 0.03) 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 50%, transparent 100%);
   }
 
   .dark .tech-grid-bg {
-    background-image: linear-gradient(to right, rgba(164, 200, 81, 0.03) 1px, transparent 1px), 
-                      linear-gradient(to bottom, rgba(164, 200, 81, 0.03) 1px, transparent 1px);
+    background-image: linear-gradient(to right, rgba(164, 200, 81, 0.02) 1px, transparent 1px), 
+                      linear-gradient(to bottom, rgba(164, 200, 81, 0.02) 1px, transparent 1px);
   }
 
   .carousel-track {
