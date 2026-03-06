@@ -1,11 +1,7 @@
 'use server';
 /**
  * @fileOverview An AI chatbot flow that answers user questions about ANDICOT's services
- * and technology ecosystems based on provided context.
- *
- * - publicAIChatbotFlow - A Genkit flow that handles chatbot interactions.
- * - PublicAIChatbotInput - The input type for the publicAIChatbotFlow function.
- * - PublicAIChatbotOutput - The return type for the publicAIChatbotFlow function.
+ * and technology ecosystems, and proactively captures lead information.
  */
 
 import {ai} from '@/ai/genkit';
@@ -15,45 +11,43 @@ const PublicAIChatbotInputSchema = z.object({
   chatHistory: z
     .array(z.object({role: z.enum(['user', 'bot']), text: z.string()}))
     .describe('The previous messages in the chat conversation.'),
-  currentMessage: z.string().describe('The user\u0027s latest message.'),
-  servicesContext: z.string().describe('A string containing details about available services for context.'),
+  currentMessage: z.string().describe('The user\'s latest message.'),
+  servicesContext: z.string().describe('Details about available services for context.'),
 });
 export type PublicAIChatbotInput = z.infer<typeof PublicAIChatbotInputSchema>;
 
 const PublicAIChatbotOutputSchema = z.object({
-  response: z.string().describe('The chatbot\u0027s generated response.'),
+  response: z.string().describe('The chatbot\'s generated response.'),
+  shouldShowWhatsApp: z.boolean().default(false).describe('Whether to show a prominent WhatsApp contact button.'),
+  leadSummary: z.string().optional().describe('A brief summary of the requirement if captured.'),
 });
 export type PublicAIChatbotOutput = z.infer<typeof PublicAIChatbotOutputSchema>;
-
-export async function publicAIChatbot(input: PublicAIChatbotInput): Promise<PublicAIChatbotOutput> {
-  return publicAIChatbotFlow(input);
-}
 
 const publicAIChatbotPrompt = ai.definePrompt({
   name: 'publicAIChatbotPrompt',
   input: {schema: PublicAIChatbotInputSchema},
   output: {schema: PublicAIChatbotOutputSchema},
-  system: "Eres el \u2728 Asistente Virtual Inteligente de ANDICOT, una prestigiosa empresa ecuatoriana experta en An\u00e1lisis, Dise\u00f1o y Construcci\u00f3n Tecnol\u00f3gica.",
-  prompt: `Historia de la conversaci\u00f3n:
+  system: `Eres el ✨ Asistente de Ventas Inteligente de ANDICOT. Tu objetivo NO es solo responder, sino CONVERTIR al usuario en un lead.
+
+REGLAS DE ORO:
+1. Si el usuario muestra interés en un servicio, responde amablemente y LUEGO pide su Nombre y WhatsApp/Email para que un ingeniero lo contacte.
+2. No esperes a que el usuario pregunte por el precio; dile que para dimensionar el costo necesitas sus datos básicos.
+3. Si el usuario ya dio sus datos o el interés es muy alto, activa 'shouldShowWhatsApp: true'.
+4. Si ya tienes suficiente información del requerimiento, incluye un 'leadSummary' (Resumen Ejecutivo) en tu respuesta.
+5. Usa un tono profesional, experto y muy servicial.`,
+  prompt: `Historia de la conversación:
 {{#each chatHistory}}
   {{this.role}}: {{this.text}}
 {{/each}}
 
-Servicios disponibles de la empresa para usar como contexto: {{{servicesContext}}}
+Servicios de ANDICOT: {{{servicesContext}}}
 
 Usuario pregunta: "{{{currentMessage}}}"
 
-Responde como un asistente de ventas experto de ANDICOT. Eres conciso, amable y profesional (m\u00e1ximo 2 p\u00e1rrafos cortos).`,
+Responde como un cerrador de ventas experto. Si el usuario se despide o el interés es claro, invítalo a finalizar por WhatsApp.`,
 });
 
-const publicAIChatbotFlow = ai.defineFlow(
-  {
-    name: 'publicAIChatbotFlow',
-    inputSchema: PublicAIChatbotInputSchema,
-    outputSchema: PublicAIChatbotOutputSchema,
-  },
-  async input => {
-    const {output} = await publicAIChatbotPrompt(input);
-    return output!;
-  },
-);
+export async function publicAIChatbot(input: PublicAIChatbotInput): Promise<PublicAIChatbotOutput> {
+  const {output} = await publicAIChatbotPrompt(input);
+  return output!;
+}
