@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Globe, LayoutDashboard, Settings, BarChart3, TrendingUp, Users as UsersIcon } from 'lucide-react';
+import { Lock, Cpu, Loader2, Sparkles, UploadCloud, Plus, Trash2, Globe, LayoutDashboard, Settings, BarChart3, TrendingUp, Users as UsersIcon, XCircle } from 'lucide-react';
 import { doc, onSnapshot, setDoc, collection } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -201,7 +201,7 @@ export default function AdminPage() {
                     <div className="space-y-5">
                       <div><label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Título Principal</label><input value={content.heroTitle} onChange={e => setContent({...content, heroTitle: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" /></div>
                       <div><label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Subtítulo Descriptivo</label><textarea value={content.heroSubtitle} onChange={e => setContent({...content, heroSubtitle: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" rows={4} /></div>
-                      <div><label className="text-[10px) font-black text-muted-foreground uppercase tracking-widest">Texto del Botón (CTA)</label><input value={content.ctaText} onChange={e => setContent({...content, ctaText: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" /></div>
+                      <div><label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Texto del Botón (CTA)</label><input value={content.ctaText} onChange={e => setContent({...content, ctaText: e.target.value})} className="w-full bg-muted border border-border p-4 rounded-xl mt-1 focus:border-primary outline-none" /></div>
                     </div>
                   </div>
                   
@@ -245,12 +245,21 @@ export default function AdminPage() {
                   <div key={s.id} className="bg-card p-8 rounded-3xl border flex flex-col md:flex-row gap-8 relative shadow-sm hover:border-primary/50 transition-all">
                     <button onClick={() => setContent({...content, services: content.services.filter(srv => srv.id !== s.id)})} className="absolute top-4 right-4 text-destructive/50 hover:text-destructive transition-colors"><Trash2 size={20} /></button>
                     <div className="shrink-0 flex flex-col items-center">
-                      <div className="w-48 h-48 bg-muted rounded-3xl overflow-hidden border border-border shadow-inner">
+                      <div className="w-48 h-48 bg-muted rounded-3xl overflow-hidden border border-border shadow-inner relative group">
                         <ImagePreview src={s.imgUrl} alt={s.title} fallbackIcon={UploadCloud} />
+                        {s.imgUrl && (
+                          <button 
+                            onClick={() => { const items = [...content.services]; items[i].imgUrl = ''; setContent({...content, services: items}); }}
+                            className="absolute top-2 right-2 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            title="Eliminar Imagen"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        )}
                       </div>
                       <div className="mt-4 flex flex-col gap-2 w-full">
                         <label className="cursor-pointer bg-muted text-foreground px-4 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-primary/10 transition-colors border border-border"><UploadCloud size={14} /> Subir Imagen<input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'services', url => { const items = [...content.services]; items[i].imgUrl = url; setContent({...content, services: items}); })} /></label>
-                        <button onClick={async () => { setLoadingAI(`desc-${s.id}`); const { description } = await generateServiceDescription({ title: s.title }); const items = [...content.services]; items[i].desc = description; setContent({...content, services: items}); setLoadingAI(null); }} disabled={loadingAI === `desc-${s.id}`} className="bg-primary/5 text-primary px-4 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-primary/10 transition-colors border border-primary/20">{loadingAI === `desc-${s.id}` ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} Redactar con IA</button>
+                        <button onClick={async () => { setLoadingAI(`desc-${s.id}`); try { const { description } = await generateServiceDescription({ title: s.title }); const items = [...content.services]; items[i].desc = description; setContent({...content, services: items}); } finally { setLoadingAI(null); } }} disabled={loadingAI === `desc-${s.id}`} className="bg-primary/5 text-primary px-4 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-primary/10 transition-colors border border-primary/20">{loadingAI === `desc-${s.id}` ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} Redactar con IA</button>
                       </div>
                     </div>
                     <div className="flex-1 space-y-6">
@@ -273,14 +282,23 @@ export default function AdminPage() {
             <div className="space-y-8">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold uppercase tracking-tighter">Partners & Alianzas</h3>
-                <button onClick={() => setContent({...content, brands: [...content.brands, { id: Date.now(), name: 'Nueva Marca', url: '' }]})} className="bg-primary text-secondary px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:opacity-90 shadow-lg"><Plus size={18} /> Nueva Alianza</button>
+                <button onClick={() => setContent({...content, brands: [{ id: Date.now(), name: 'Nueva Marca', url: '' }, ...content.brands]})} className="bg-primary text-secondary px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold hover:opacity-90 shadow-lg"><Plus size={18} /> Nueva Alianza</button>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {content.brands.map((b, i) => (
                   <div key={b.id} className="bg-card p-6 rounded-3xl border relative flex flex-col items-center gap-4 shadow-sm hover:border-primary/50 transition-all">
                     <button onClick={() => setContent({...content, brands: content.brands.filter(br => br.id !== b.id)})} className="absolute top-2 right-2 text-destructive/40 hover:text-destructive"><Trash2 size={16}/></button>
-                    <div className="h-28 flex items-center justify-center p-4 bg-muted/30 w-full rounded-2xl border border-border overflow-hidden">
+                    <div className="h-28 flex items-center justify-center p-4 bg-muted/30 w-full rounded-2xl border border-border overflow-hidden relative group">
                       <BrandPreview src={b.url} name={b.name} />
+                      {b.url && (
+                        <button 
+                          onClick={() => { const items = [...content.brands]; items[i].url = ''; setContent({...content, brands: items}); }}
+                          className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          title="Eliminar Logo"
+                        >
+                          <XCircle size={12} />
+                        </button>
+                      )}
                     </div>
                     <input value={b.name} onChange={e => { const items = [...content.brands]; items[i].name = e.target.value; setContent({...content, brands: items}); }} className="w-full text-center font-bold text-[10px] uppercase bg-muted p-2 rounded-lg border border-border focus:border-primary outline-none" />
                     <label className="cursor-pointer bg-secondary text-white px-4 py-2 rounded-lg text-[9px] font-bold hover:bg-primary hover:text-secondary transition-all w-full text-center uppercase tracking-widest">Cargar Logo<input type="file" className="hidden" onChange={e => e.target.files && handleUpload(e.target.files[0], 'brands', url => { const items = [...content.brands]; items[i].url = url; setContent({...content, brands: items}); })} /></label>
