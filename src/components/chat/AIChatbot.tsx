@@ -18,6 +18,13 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Escuchar evento para abrir el chat desde el Hero
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-ai-chat', handleOpen);
+    return () => window.removeEventListener('open-ai-chat', handleOpen);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;

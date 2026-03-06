@@ -1,12 +1,15 @@
-
 "use client";
 
 import React from 'react';
-import { Activity, ArrowDown } from 'lucide-react';
+import { Activity, ArrowDown, Sparkles } from 'lucide-react';
 import { IconMapper } from '../icons/IconMapper';
 import { SiteContent } from '@/lib/types';
 
 export const Hero = ({ content }: { content: SiteContent }) => {
+  const openChat = () => {
+    window.dispatchEvent(new CustomEvent('open-ai-chat'));
+  };
+
   return (
     <section id="top" className="relative min-h-screen pt-32 pb-20 flex flex-col justify-center overflow-hidden z-10">
       <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -22,12 +25,18 @@ export const Hero = ({ content }: { content: SiteContent }) => {
           <p className="text-base md:text-xl font-body italic text-gray-400 max-w-xl mb-12 leading-relaxed opacity-90 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
             {content.heroSubtitle}
           </p>
-          <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-            <a href="#contacto" className="bg-primary text-secondary font-bold py-5 px-10 rounded-xl text-lg hover:bg-white transition-all duration-500 shadow-[0_10px_30px_rgba(164,200,81,0.2)] text-center hover:-translate-y-1">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+            <a href="#contacto" className="bg-primary text-secondary font-bold py-4 px-8 rounded-xl text-base md:text-lg hover:bg-white transition-all duration-500 shadow-[0_10px_30px_rgba(164,200,81,0.2)] text-center hover:-translate-y-1">
               {content.ctaText}
             </a>
-            <a href="#soluciones" className="glass-card text-white font-medium py-5 px-10 rounded-xl text-lg hover:bg-white/10 transition-all duration-500 text-center flex items-center justify-center gap-2">
-              Explorar Ecosistemas <ArrowDown size={18} className="animate-bounce" />
+            <button 
+              onClick={openChat}
+              className="bg-secondary/50 backdrop-blur-md border border-primary/30 text-white font-bold py-4 px-8 rounded-xl text-base md:text-lg hover:bg-primary hover:text-secondary transition-all duration-500 flex items-center justify-center gap-2 group shadow-xl"
+            >
+              <Sparkles size={20} className="text-primary group-hover:text-secondary transition-colors" /> Asistente IA
+            </button>
+            <a href="#soluciones" className="glass-card text-white font-medium py-4 px-8 rounded-xl text-base md:text-lg hover:bg-white/10 transition-all duration-500 text-center flex items-center justify-center gap-2 border-white/5">
+              Soluciones <ArrowDown size={18} className="animate-bounce" />
             </a>
           </div>
         </div>
