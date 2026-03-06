@@ -3,7 +3,7 @@ export interface Service {
   title: string;
   desc: string;
   imgUrl: string;
-  defaultImgUrl?: string; // URL original de respaldo
+  defaultImgUrl?: string; // URL original de respaldo que no se pierde
   icon: string;
 }
 
@@ -11,7 +11,7 @@ export interface Brand {
   id: number;
   name: string;
   url: string;
-  defaultUrl?: string; // URL original de respaldo
+  defaultUrl?: string; // URL original de respaldo que no se pierde
 }
 
 export interface Stat {
