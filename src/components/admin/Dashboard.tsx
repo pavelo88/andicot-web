@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Settings, Server, ImageIcon, Users, LogOut, Cpu, Save, Menu, X } from 'lucide-react';
+import { Settings, Server, ImageIcon, Users, LogOut, Cpu, Save, Menu, X, BarChart3 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 
@@ -19,6 +19,13 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
 
   const navItems = (
     <div className="flex-1 py-6 px-4 space-y-6">
+      <div>
+        <p className="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Rendimiento</p>
+        <button onClick={() => { setActiveTab('metrics'); setOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${activeTab === 'metrics' ? 'bg-primary text-secondary font-bold' : 'text-gray-300 hover:bg-white/10'}`}>
+          <BarChart3 size={18} /> Estadísticas
+        </button>
+      </div>
+
       <div>
         <p className="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Editor Web (CMS)</p>
         <div className="space-y-1">
@@ -44,7 +51,7 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
   );
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-headline text-gray-900 bg-slate-50">
+    <div className="min-h-screen flex flex-col md:flex-row font-headline text-gray-900 bg-slate-50 w-full overflow-x-hidden">
       {/* Sidebar Desktop */}
       <aside className="hidden md:flex w-64 bg-secondary text-white flex-col flex-shrink-0 sticky top-0 h-screen shadow-xl">
         <div className="h-20 flex items-center px-6 border-b border-white/10 bg-[#1e2246]">
@@ -74,9 +81,9 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0 bg-secondary text-white border-none">
-            <SheetHeader className="h-16 flex flex-row items-center px-6 border-b border-white/10 bg-[#1e2246] space-y-0">
-               <SheetTitle className="text-xl font-bold text-primary">Menú</SheetTitle>
-               <SheetDescription className="sr-only">Panel de navegación administrativa para ANDICOT.</SheetDescription>
+            <SheetHeader className="h-16 flex flex-row items-center px-6 border-b border-white/10 bg-[#1e2246] space-y-0 text-left">
+               <SheetTitle className="text-xl font-bold text-primary">Navegación</SheetTitle>
+               <SheetDescription className="sr-only">Menú lateral para gestionar contenido y ventas.</SheetDescription>
             </SheetHeader>
             {navItems}
             <div className="p-4 border-t border-white/10 mt-auto">
@@ -89,15 +96,16 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
       </header>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 w-full">
         <header className="h-20 bg-white border-b border-gray-200 hidden md:flex items-center justify-between px-8 flex-shrink-0 sticky top-0 z-30">
           <h2 className="text-2xl font-bold text-secondary capitalize">
+            {activeTab === 'metrics' && 'Panel de Estadísticas'}
             {activeTab === 'general' && 'Configuración General'}
-            {activeTab === 'ecosystems' && 'Ecosistemas (Servicios)'}
+            {activeTab === 'ecosystems' && 'Gestión de Ecosistemas'}
             {activeTab === 'brands' && 'Aliados Estratégicos'}
             {activeTab === 'crm' && 'CRM de Prospectos'}
           </h2>
-          {activeTab !== 'crm' && (
+          {activeTab !== 'crm' && activeTab !== 'metrics' && (
             <button 
               onClick={onSave} 
               disabled={isSaving} 
@@ -109,7 +117,7 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
         </header>
 
         {/* Floating Save Button Mobile */}
-        {activeTab !== 'crm' && (
+        {activeTab !== 'crm' && activeTab !== 'metrics' && (
           <div className="md:hidden fixed bottom-6 right-6 z-50">
              <Button 
                 onClick={onSave} 
@@ -124,13 +132,16 @@ export const Dashboard = ({ children, activeTab, setActiveTab, onSave, onLogout,
         <div className="flex-1 p-4 md:p-8 overflow-x-hidden">
           <div className="md:hidden mb-6">
             <h2 className="text-2xl font-bold text-secondary capitalize">
+              {activeTab === 'metrics' && 'Estadísticas'}
               {activeTab === 'general' && 'Configuración'}
               {activeTab === 'ecosystems' && 'Ecosistemas'}
               {activeTab === 'brands' && 'Marcas'}
               {activeTab === 'crm' && 'Prospectos'}
             </h2>
           </div>
-          {children}
+          <div className="w-full">
+            {children}
+          </div>
         </div>
       </div>
     </div>
