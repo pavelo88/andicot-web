@@ -12,45 +12,38 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 
-const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?: boolean }) => {
+const ServiceCard = ({ service }: { service: Service }) => {
   const [hasError, setHasError] = useState(false);
 
   return (
-    <div className={cn(
-      "group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end",
-      "h-[300px] md:h-[350px]",
-      isLarge ? "lg:col-span-2 lg:row-span-2 lg:h-full" : "col-span-1"
-    )}>
+    <div className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end h-[320px] md:h-[380px] border border-border shadow-lg">
       <div className="absolute inset-0 z-0">
         {!hasError && service.imgUrl ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
             onError={() => setHasError(true)}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
           />
         ) : (
-          <div className="w-full h-full bg-muted flex items-center justify-center">
-            <IconMapper name={service.icon} size={48} className="text-primary/20" />
-            <span className="absolute bottom-10 font-bold text-xs uppercase tracking-widest text-primary opacity-50">{service.title}</span>
+          <div className="w-full h-full bg-muted flex flex-col items-center justify-center p-6 text-center">
+            <IconMapper name={service.icon} size={64} className="text-primary/20 mb-4" />
+            <span className="font-bold text-sm uppercase tracking-widest text-primary/60">{service.title}</span>
           </div>
         )}
-        {/* Sombra sutil solo en la base para legibilidad, no tapa la foto */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+        {/* Sombra sutil solo en la base para lectura, sin tapar la foto */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80" />
       </div>
       
       <div className="relative z-20 p-6 md:p-8">
-        <div className="w-10 h-10 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+        <div className="w-10 h-10 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-xl group-hover:scale-110 transition-transform">
           <IconMapper name={service.icon} size={20} />
         </div>
         <div className="space-y-2">
-          <h3 className={cn(
-            "font-headline font-bold text-white group-hover:text-primary leading-tight transition-colors",
-            isLarge ? "text-2xl md:text-3xl" : "text-lg md:text-xl"
-          )}>
+          <h3 className="font-headline font-bold text-white text-lg md:text-xl group-hover:text-primary leading-tight transition-colors uppercase tracking-tight">
             {service.title}
           </h3>
-          <p className="text-white/80 text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed">
+          <p className="text-white/90 text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed font-medium">
             {service.desc}
           </p>
         </div>
@@ -80,39 +73,39 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
 
   return (
     <section id="soluciones" className="px-6 py-16 md:py-24 max-w-7xl mx-auto relative z-10">
-      <div className="text-center mb-12">
+      <div className="text-center mb-16">
         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
-           <span className="text-[10px] font-bold tracking-[0.4em] text-primary uppercase">Portfolio Tecnológico</span>
+           <span className="text-[10px] font-bold tracking-[0.4em] text-primary uppercase">Ecosistemas Tecnológicos</span>
         </div>
-        <h2 className="text-3xl md:text-6xl font-headline font-bold mb-6 text-foreground tracking-tight">
-          Nuestros <span className="text-primary">Ecosistemas</span>
+        <h2 className="text-4xl md:text-6xl font-headline font-bold mb-6 text-foreground tracking-tighter">
+          Nuestra <span className="text-primary">Ingeniería</span>
         </h2>
         
         <div className="max-w-md mx-auto relative mt-8">
-          <div className="relative flex items-center bg-background/50 backdrop-blur-md border border-border rounded-2xl p-1 shadow-xl">
-            <Search className="ml-4 text-primary/50" size={20} />
+          <div className="relative flex items-center bg-card/50 backdrop-blur-md border border-border rounded-2xl p-1 shadow-2xl">
+            <Search className="ml-4 text-primary" size={20} />
             <input 
               type="text" 
-              placeholder="Buscar servicio..."
+              placeholder="¿Qué servicio buscas?"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-transparent border-none focus:ring-0 text-foreground placeholder:text-muted-foreground px-4 py-3 text-sm"
+              className="w-full bg-transparent border-none focus:ring-0 text-foreground placeholder:text-muted-foreground px-4 py-4 text-sm font-bold"
             />
           </div>
         </div>
       </div>
 
-      {/* Mobile View: Carousel */}
+      {/* Vista Móvil: Carrusel Táctil */}
       <div className="md:hidden">
         {filteredServices.length > 0 ? (
           <Carousel 
             setApi={setApi}
             opts={{ loop: true, align: "start" }} 
-            className="w-full max-w-sm mx-auto"
+            className="w-full"
           >
             <CarouselContent className="-ml-4">
               {filteredServices.map((service) => (
-                <CarouselItem key={service.id} className="pl-4 basis-[90%]">
+                <CarouselItem key={service.id} className="pl-4 basis-[85%]">
                   <ServiceCard service={service} />
                 </CarouselItem>
               ))}
@@ -120,25 +113,22 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
           </Carousel>
         ) : (
           <div className="text-center py-20 border-dashed border-2 border-border rounded-3xl">
-            <Info className="mx-auto text-muted-foreground mb-4" size={48} />
-            <p className="text-muted-foreground font-bold uppercase text-xs tracking-[0.2em]">Sin resultados</p>
+            <p className="text-muted-foreground font-bold uppercase text-xs">Sin resultados</p>
           </div>
         )}
       </div>
 
-      {/* Desktop View: Dynamic Grid */}
-      <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 auto-rows-[300px]">
+      {/* Vista Escritorio: Grid Estable sin solapamientos */}
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
         {filteredServices.length > 0 ? (
-          filteredServices.map((service, index) => (
-            <ServiceCard 
-              key={service.id} 
-              service={service} 
-              isLarge={!search && (index === 0 || index === 5)} 
-            />
+          filteredServices.map((service) => (
+            <div key={service.id} className="col-span-1">
+              <ServiceCard service={service} />
+            </div>
           ))
         ) : (
-          <div className="col-span-full text-center py-20 border border-border rounded-3xl">
-             <p className="text-muted-foreground font-bold">No hay resultados para "{search}"</p>
+          <div className="col-span-full text-center py-20 border border-border border-dashed rounded-3xl">
+             <p className="text-muted-foreground font-bold">No se encontraron ecosistemas para: "{search}"</p>
           </div>
         )}
       </div>
