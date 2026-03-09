@@ -17,6 +17,7 @@ const ServiceCard = ({ service }: { service: Service }) => {
 
   return (
     <div className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end h-[400px] border border-border shadow-2xl">
+      {/* Imagen de Fondo Full */}
       <div className="absolute inset-0 z-0">
         {!hasError && service.imgUrl ? (
           <img 
@@ -33,16 +34,18 @@ const ServiceCard = ({ service }: { service: Service }) => {
         )}
       </div>
       
-      {/* Contenedor de texto con alta opacidad para máxima legibilidad */}
-      <div className="relative z-20 w-full p-6 bg-black/80 backdrop-blur-md border-t border-white/10">
-        <div className="w-10 h-10 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-xl group-hover:scale-110 transition-transform">
-          <IconMapper name={service.icon} size={20} />
-        </div>
-        <div className="space-y-2">
+      {/* Icono Flotante (Fuera del contenedor de texto) */}
+      <div className="absolute top-6 left-6 z-20 w-12 h-12 rounded-2xl bg-primary text-secondary flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+        <IconMapper name={service.icon} size={24} />
+      </div>
+
+      {/* Contenedor de Texto tipo "Tarjeta Flotante" */}
+      <div className="relative z-20 mx-4 mb-4 p-5 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 w-[calc(100%-2rem)] transition-all duration-300 group-hover:bg-black/60">
+        <div className="space-y-1.5">
           <h3 className="font-headline font-bold text-white text-lg group-hover:text-primary leading-tight transition-colors uppercase tracking-tight">
             {service.title}
           </h3>
-          <p className="text-white/80 text-[11px] font-body italic line-clamp-2 leading-relaxed font-medium">
+          <p className="text-white/90 text-[11px] font-body italic line-clamp-2 leading-relaxed font-medium">
             {service.desc}
           </p>
         </div>
@@ -64,10 +67,9 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
 
   useEffect(() => {
     if (!api) return;
-    // Auto-play ajustado a 2.5 segundos (2500ms)
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2500);
+    }, 2500); // 2.5 segundos exactos
     return () => clearInterval(interval);
   }, [api]);
 
@@ -77,7 +79,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
            <span className="text-[10px] font-bold tracking-[0.4em] text-primary uppercase">Ecosistemas Tecnológicos</span>
         </div>
-        <h2 className="text-4xl md:text-6xl font-headline font-bold mb-6 text-foreground tracking-tighter">
+        <h2 className="text-4xl md:text-6xl font-headline font-bold mb-6 text-foreground tracking-tighter leading-none">
           Nuestra <span className="text-primary">Ingeniería</span>
         </h2>
         
@@ -95,7 +97,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         </div>
       </div>
 
-      {/* Vista Móvil: Carrusel de una sola imagen (full width) */}
+      {/* Vista Móvil: Una sola imagen a la vez */}
       <div className="md:hidden">
         {filteredServices.length > 0 ? (
           <Carousel 
@@ -120,7 +122,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         )}
       </div>
 
-      {/* Vista Escritorio: Grid Estable de 4 columnas (diseño restaurado) */}
+      {/* Vista Escritorio: Grid Estable de 4 columnas */}
       <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
