@@ -15,6 +15,7 @@ import {
 
 const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?: boolean }) => {
   const [imgError, setImgError] = useState(false);
+  const isValidUrl = service.imgUrl && service.imgUrl.trim() !== "";
 
   return (
     <div className={cn(
@@ -22,9 +23,8 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       "h-[300px]",
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[460px]" : "col-span-1"
     )}>
-      {/* Background Image Container - High Strength */}
       <div className="absolute inset-0 z-0">
-        {!imgError ? (
+        {(isValidUrl && !imgError) ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
@@ -38,11 +38,9 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
             </div>
           </div>
         )}
-        {/* Darkening Overlay at the bottom for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
       </div>
       
-      {/* Text Content - Always White for clarity over images */}
       <div className="relative z-20 p-6 md:p-8">
         <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 transition-all duration-500 shadow-lg">
           <IconMapper name={service.icon} size={20} />

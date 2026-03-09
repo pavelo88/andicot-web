@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -6,7 +7,7 @@ import { doc, onSnapshot, setDoc, collection } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { SiteContent } from '@/lib/types';
-import { defaultSiteContent, defaultBrands } from '@/lib/defaults';
+import { defaultSiteContent, defaultBrands, defaultServices } from '@/lib/defaults';
 import { Dashboard } from '@/components/admin/Dashboard';
 import { CRMLeads } from '@/components/admin/CRMLeads';
 import { generateSeoMetadata } from '@/ai/flows/generate-seo-metadata-flow';
@@ -39,7 +40,24 @@ export default function AdminPage() {
     const unsubContent = onSnapshot(doc(db, 'config', 'siteContent'), (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.data() as SiteContent;
-        setContent({ ...defaultSiteContent, ...data });
+        
+        // Lógica de Sincronización: Si faltan campos de respaldo, los inyectamos de los defaults.
+        const syncedBrands = (data.brands || []).map(b => {
+          const def = defaultBrands.find(db => db.id === b.id);
+          return { ...b, defaultUrl: b.defaultUrl || def?.url || '' };
+        });
+
+        const syncedServices = (data.services || []).map(s => {
+          const def = defaultServices.find(ds => ds.id === s.id);
+          return { ...s, defaultImgUrl: s.defaultImgUrl || def?.imgUrl || '' };
+        });
+
+        setContent({ 
+          ...defaultSiteContent, 
+          ...data, 
+          brands: syncedBrands, 
+          services: syncedServices 
+        });
       }
     });
 

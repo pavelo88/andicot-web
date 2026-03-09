@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -7,8 +8,10 @@ import { cn } from '@/lib/utils';
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
   const [hasError, setHasError] = useState(false);
 
-  // Evitamos el error de "empty string" no renderizando el <img> si no hay URL
-  const shouldShowText = !brand.url || hasError;
+  // Verificación estricta: si no hay URL o hay error, mostramos texto.
+  // Importante: No renderizamos el tag <img> si la URL está vacía.
+  const isValidUrl = brand.url && brand.url.trim() !== "";
+  const shouldShowText = !isValidUrl || hasError;
 
   return (
     <div 
@@ -68,7 +71,6 @@ export const BrandCarousel = ({ brands }: { brands: SiteContent['brands'] }) => 
 
   if (!brands || brands.length === 0) return null;
 
-  // Filtramos marcas que no tengan ni nombre ni url por seguridad
   const validBrands = brands.filter(b => b.name || b.url);
   if (validBrands.length === 0) return null;
 
