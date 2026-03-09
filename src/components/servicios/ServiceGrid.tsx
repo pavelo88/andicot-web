@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { IconMapper } from '../icons/IconMapper';
 import { Service } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Search, Info } from 'lucide-react';
+import { Search } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -16,7 +16,7 @@ const ServiceCard = ({ service }: { service: Service }) => {
   const [hasError, setHasError] = useState(false);
 
   return (
-    <div className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end h-[320px] md:h-[380px] border border-border shadow-lg">
+    <div className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end h-[400px] border border-border shadow-2xl">
       <div className="absolute inset-0 z-0">
         {!hasError && service.imgUrl ? (
           <img 
@@ -31,19 +31,18 @@ const ServiceCard = ({ service }: { service: Service }) => {
             <span className="font-bold text-sm uppercase tracking-widest text-primary/60">{service.title}</span>
           </div>
         )}
-        {/* Sombra sutil solo en la base para lectura, sin tapar la foto */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80" />
       </div>
       
-      <div className="relative z-20 p-6 md:p-8">
+      {/* Contenedor de texto con alta opacidad para máxima legibilidad */}
+      <div className="relative z-20 w-full p-6 bg-black/80 backdrop-blur-md border-t border-white/10">
         <div className="w-10 h-10 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-xl group-hover:scale-110 transition-transform">
           <IconMapper name={service.icon} size={20} />
         </div>
         <div className="space-y-2">
-          <h3 className="font-headline font-bold text-white text-lg md:text-xl group-hover:text-primary leading-tight transition-colors uppercase tracking-tight">
+          <h3 className="font-headline font-bold text-white text-lg group-hover:text-primary leading-tight transition-colors uppercase tracking-tight">
             {service.title}
           </h3>
-          <p className="text-white/90 text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed font-medium">
+          <p className="text-white/80 text-[11px] font-body italic line-clamp-2 leading-relaxed font-medium">
             {service.desc}
           </p>
         </div>
@@ -65,9 +64,10 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
 
   useEffect(() => {
     if (!api) return;
+    // Auto-play ajustado a 2.5 segundos (2500ms)
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 5000);
+    }, 2500);
     return () => clearInterval(interval);
   }, [api]);
 
@@ -95,7 +95,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         </div>
       </div>
 
-      {/* Vista Móvil: Carrusel Táctil */}
+      {/* Vista Móvil: Carrusel de una sola imagen (full width) */}
       <div className="md:hidden">
         {filteredServices.length > 0 ? (
           <Carousel 
@@ -103,10 +103,12 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
             opts={{ loop: true, align: "start" }} 
             className="w-full"
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-0">
               {filteredServices.map((service) => (
-                <CarouselItem key={service.id} className="pl-4 basis-[85%]">
-                  <ServiceCard service={service} />
+                <CarouselItem key={service.id} className="pl-0 basis-full">
+                  <div className="px-2">
+                    <ServiceCard service={service} />
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -118,7 +120,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         )}
       </div>
 
-      {/* Vista Escritorio: Grid Estable sin solapamientos */}
+      {/* Vista Escritorio: Grid Estable de 4 columnas (diseño restaurado) */}
       <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
