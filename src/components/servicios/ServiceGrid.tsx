@@ -36,7 +36,7 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
             </div>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-10" />
       </div>
       
       <div className="relative z-20 p-6 md:p-8">

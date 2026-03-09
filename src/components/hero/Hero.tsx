@@ -15,18 +15,18 @@ export const Hero = ({ content }: { content: SiteContent }) => {
     <section id="top" className="relative min-h-screen pt-32 pb-20 flex flex-col justify-center overflow-hidden z-10 transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass-card border-primary/20 text-primary text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8 animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass-card border-primary/20 text-primary text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
             <Activity size={16} className="animate-pulse" /> Ingeniería de Alto Nivel
           </div>
-          <h1 className="text-4xl md:text-6xl lg:text-8xl font-headline font-bold mb-8 tracking-tighter leading-[1] text-foreground animate-in fade-in slide-in-from-left-8 duration-300">
+          <h1 className="text-4xl md:text-6xl lg:text-8xl font-headline font-bold mb-8 tracking-tighter leading-[1] text-foreground">
             {content.heroTitle.split(' ').map((word, i) => (
               <span key={i} className={i % 3 === 0 ? "text-primary block md:inline" : ""}>{word} </span>
             ))}
           </h1>
-          <p className="text-base md:text-xl font-body italic text-muted-foreground max-w-xl mb-12 leading-relaxed opacity-90 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <p className="text-base md:text-xl font-body italic text-muted-foreground max-w-xl mb-12 leading-relaxed opacity-90">
             {content.heroSubtitle}
           </p>
-          <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-8 duration-300">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full sm:w-auto">
             <a href="#contacto" className="bg-primary text-secondary font-bold py-4 px-8 rounded-xl text-base md:text-lg hover:bg-secondary hover:text-white dark:hover:bg-white transition-all duration-500 shadow-[0_10px_30px_rgba(164,200,81,0.25)] text-center hover:-translate-y-1">
               {content.ctaText}
             </a>
@@ -42,15 +42,16 @@ export const Hero = ({ content }: { content: SiteContent }) => {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-3 md:gap-4 animate-in fade-in zoom-in duration-300">
+        {/* Cuadros de experiencia reducidos un 20% y sin parpadeo de animación */}
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {content.stats.map((stat) => (
-            <div key={stat.id} className="glass-card p-4 md:p-5 rounded-3xl flex flex-col items-center justify-center text-center hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group relative">
+            <div key={stat.id} className="glass-card p-3 md:p-4 rounded-3xl flex flex-col items-center justify-center text-center hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group relative">
               <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-primary/20 animate-ping group-hover:bg-primary" />
-              <div className="w-9 h-9 md:w-11 md:h-11 rounded-2xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-3 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-lg">
-                <IconMapper name={stat.icon} size={18} />
+              <div className="w-7 h-7 md:w-9 md:h-9 rounded-2xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-3 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-lg">
+                <IconMapper name={stat.icon} size={16} />
               </div>
-              <h3 className="text-xl md:text-3xl font-bold font-headline text-foreground mb-1 tracking-tighter">{stat.value}</h3>
-              <p className="text-[7px] md:text-[9px] font-bold tracking-[0.3em] text-primary/70 uppercase">{stat.label}</p>
+              <h3 className="text-lg md:text-2xl font-bold font-headline text-foreground mb-1 tracking-tighter">{stat.value}</h3>
+              <p className="text-[6px] md:text-[8px] font-bold tracking-[0.3em] text-primary/70 uppercase">{stat.label}</p>
             </div>
           ))}
         </div>

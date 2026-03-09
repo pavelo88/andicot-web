@@ -6,6 +6,7 @@ import { SiteContent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
+  // Pintamos tal como viene, sin lógica de error que borre la imagen
   const isValidUrl = brand.url && brand.url.trim() !== "";
 
   return (
@@ -26,7 +27,7 @@ const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isAct
         />
       ) : (
         <span className={cn(
-          "font-bold text-xl md:text-2xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
+          "font-bold text-lg md:text-xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
           isActive ? "text-primary opacity-100" : "text-white opacity-60"
         )}>
           {brand.name}
