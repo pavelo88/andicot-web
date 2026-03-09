@@ -14,15 +14,13 @@ import { generateSeoMetadata } from '@/ai/flows/generate-seo-metadata-flow';
 import { generateServiceDescription } from '@/ai/flows/generate-service-description-flow';
 
 const ImagePreview = ({ src, alt, fallbackIcon: Icon }: { src: string, alt: string, fallbackIcon: any }) => {
-  const [error, setError] = useState(false);
-  if (!src || error) return <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50"><Icon size={32}/></div>;
-  return <img src={src} alt={alt} onError={() => setError(true)} className="w-full h-full object-cover" />;
+  if (!src) return <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50"><Icon size={32}/></div>;
+  return <img src={src} alt={alt} className="w-full h-full object-cover" />;
 };
 
 const BrandPreview = ({ src, name }: { src: string, name: string }) => {
-  const [error, setError] = useState(false);
-  if (!src || error) return <div className="h-full flex items-center justify-center p-4 bg-muted/50 w-full rounded border text-xs font-bold text-muted-foreground uppercase">{name}</div>;
-  return <img src={src} alt={name} onError={() => setError(true)} className="max-h-full object-contain" />;
+  if (!src) return <div className="h-full flex items-center justify-center p-4 bg-muted/50 w-full rounded border text-xs font-bold text-muted-foreground uppercase">{name}</div>;
+  return <img src={src} alt={name} className="max-h-full object-contain" />;
 };
 
 export default function AdminPage() {
@@ -41,7 +39,6 @@ export default function AdminPage() {
       if (snapshot.exists()) {
         const data = snapshot.data() as SiteContent;
         
-        // Lógica de Sincronización: Si faltan campos de respaldo, los inyectamos de los defaults.
         const syncedBrands = (data.brands || []).map(b => {
           const def = defaultBrands.find(db => db.id === b.id);
           return { ...b, defaultUrl: b.defaultUrl || def?.url || '' };
@@ -281,7 +278,6 @@ export default function AdminPage() {
                           <button 
                             onClick={() => { 
                               const items = [...content.services]; 
-                              // Si hay una por defecto, volvemos a ella. Si no, vacío.
                               items[i].imgUrl = items[i].defaultImgUrl || ''; 
                               setContent({...content, services: items}); 
                             }}
@@ -335,8 +331,6 @@ export default function AdminPage() {
                         <button 
                           onClick={() => { 
                             const items = [...content.brands]; 
-                            // Si la URL actual NO es la original, volvemos a la original.
-                            // Si ya es la original o no tiene, se limpia.
                             items[i].url = items[i].defaultUrl || ''; 
                             setContent({...content, brands: items}); 
                           }}

@@ -25,9 +25,8 @@ const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isAct
           )}
         />
       ) : (
-        /* Texto de marcas ajustado (reducción del 10% sobre el tamaño anterior) */
         <span className={cn(
-          "font-bold text-2xl md:text-3xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
+          "font-bold text-xl md:text-2xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
           isActive ? "text-primary opacity-100" : "text-white opacity-60"
         )}>
           {brand.name}
