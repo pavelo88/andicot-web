@@ -6,7 +6,7 @@ import { SiteContent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
-  // Pintamos tal como viene, sin lógica de error que borre la imagen
+  // Pintamos la imagen si hay URL, sin lógica de error que la borre
   const isValidUrl = brand.url && brand.url.trim() !== "";
 
   return (

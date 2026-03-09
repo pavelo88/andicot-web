@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -93,7 +94,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
   return (
     <div className="fixed bottom-6 left-6 z-50">
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl mb-4 w-80 md:w-96 overflow-hidden border border-gray-200 flex flex-col h-[500px] animate-in slide-in-from-bottom-5">
+        <div className="bg-white rounded-2xl shadow-2xl mb-4 w-80 md:w-96 overflow-hidden border border-gray-200 flex flex-col h-[500px]">
           <div className="bg-secondary text-white p-4 flex justify-between items-center shrink-0">
             <div className="flex items-center gap-2">
               <Bot size={20} className="text-primary" />
@@ -112,7 +113,7 @@ export const AIChatbot = ({ content }: { content: SiteContent }) => {
                   {msg.text}
                 </div>
                 {msg.showWA && (
-                  <div className="mt-3 flex flex-col items-start gap-2 animate-in fade-in zoom-in-95">
+                  <div className="mt-3 flex flex-col items-start gap-2">
                     {hasSavedLead && (
                       <div className="flex items-center gap-1.5 text-[10px] text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full border border-green-200">
                         <CheckCircle2 size={10} /> Proyecto registrado en CRM

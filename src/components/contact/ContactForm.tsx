@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -38,7 +39,7 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
     <section id="contacto" className="px-4 sm:px-6 py-24 relative z-10 bg-gradient-to-b from-transparent to-muted dark:to-[#05060d]">
       <div className="max-w-7xl mx-auto">
         
-        <div className="text-center mb-16 max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-headline font-bold mb-6 text-foreground leading-tight">
             {content.formTitle}
           </h2>
@@ -149,7 +150,7 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
               
               <div className="mt-8 relative z-10 space-y-4">
                 {status.message && (
-                  <div className={`mb-4 p-4 rounded-2xl flex items-center gap-3 font-bold text-sm border animate-in zoom-in-95 ${status.type === 'error' ? 'bg-red-500/10 border-red-500/50 text-red-600' : 'bg-primary/10 border-primary/50 text-primary'}`}>
+                  <div className={`mb-4 p-4 rounded-2xl flex items-center gap-3 font-bold text-sm border ${status.type === 'error' ? 'bg-red-500/10 border-red-500/50 text-red-600' : 'bg-primary/10 border-primary/50 text-primary'}`}>
                     {status.type === 'error' ? <XCircle size={18}/> : <CheckCircle2 size={18}/>}
                     {status.message}
                   </div>
