@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -41,15 +42,16 @@ export const Hero = ({ content }: { content: SiteContent }) => {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4 md:gap-6 animate-in fade-in zoom-in duration-1000 delay-700">
+        {/* Tarjetas de Experiencia reducidas un 20% aprox */}
+        <div className="grid grid-cols-2 gap-3 md:gap-4 animate-in fade-in zoom-in duration-1000 delay-700">
           {content.stats.map((stat) => (
-            <div key={stat.id} className="glass-card p-6 md:p-8 rounded-3xl flex flex-col items-center justify-center text-center hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group relative">
-              <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-primary/20 animate-ping group-hover:bg-primary" />
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-4 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-lg">
-                <IconMapper name={stat.icon} size={24} />
+            <div key={stat.id} className="glass-card p-4 md:p-6 rounded-3xl flex flex-col items-center justify-center text-center hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group relative">
+              <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-primary/20 animate-ping group-hover:bg-primary" />
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-3 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-lg">
+                <IconMapper name={stat.icon} size={20} />
               </div>
-              <h3 className="text-3xl md:text-5xl font-bold font-headline text-foreground mb-2 tracking-tighter">{stat.value}</h3>
-              <p className="text-[9px] md:text-[11px] font-bold tracking-[0.3em] text-primary/70 uppercase">{stat.label}</p>
+              <h3 className="text-2xl md:text-4xl font-bold font-headline text-foreground mb-1 tracking-tighter">{stat.value}</h3>
+              <p className="text-[8px] md:text-[10px] font-bold tracking-[0.3em] text-primary/70 uppercase">{stat.label}</p>
             </div>
           ))}
         </div>

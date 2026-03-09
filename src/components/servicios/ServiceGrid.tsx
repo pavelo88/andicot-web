@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/carousel";
 
 const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?: boolean }) => {
-  const [imgError, setImgError] = useState(false);
   const isValidUrl = service.imgUrl && service.imgUrl.trim() !== "";
 
   return (
@@ -23,11 +23,10 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[460px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
-        {(isValidUrl && !imgError) ? (
+        {isValidUrl ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
-            onError={() => setImgError(true)}
             className="w-full h-full object-cover opacity-100 group-hover:scale-110 transition-all duration-1000" 
           />
         ) : (
@@ -37,8 +36,8 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
             </div>
           </div>
         )}
-        {/* Degradado más suave para no "oscurecer" la imagen en exceso */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10" />
+        {/* Degradado suavizado para que no se vea como fondo negro encima */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
       </div>
       
       <div className="relative z-20 p-6 md:p-8">

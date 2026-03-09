@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -5,10 +6,7 @@ import { SiteContent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
-  const [hasError, setHasError] = useState(false);
-
   const isValidUrl = brand.url && brand.url.trim() !== "";
-  const shouldShowText = !isValidUrl || hasError;
 
   return (
     <div 
@@ -17,19 +15,19 @@ const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isAct
         isActive ? "scale-110" : "scale-90"
       )}
     >
-      {!shouldShowText ? (
+      {isValidUrl ? (
         <img 
           src={brand.url} 
           alt={brand.name} 
-          onError={() => setHasError(true)}
           className={cn(
             "max-h-8 md:max-h-12 max-w-full transition-all duration-1000 ease-in-out pointer-events-none",
-            isActive ? "opacity-100 grayscale-0 brightness-110" : "opacity-70 grayscale brightness-95"
+            isActive ? "opacity-100 grayscale-0 brightness-110" : "opacity-80 grayscale brightness-95"
           )}
         />
       ) : (
+        /* Texto de marcas duplicado en tamaño */
         <span className={cn(
-          "font-bold text-xl md:text-2xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
+          "font-bold text-3xl md:text-4xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
           isActive ? "text-primary opacity-100" : "text-white opacity-60"
         )}>
           {brand.name}
