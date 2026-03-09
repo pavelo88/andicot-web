@@ -10,7 +10,7 @@ import { ContactForm } from '@/components/contact/ContactForm';
 import { AIChatbot } from '@/components/chat/AIChatbot';
 import { Facebook, Instagram, Linkedin, MessageCircle } from 'lucide-react';
 import { SiteContent } from '@/lib/types';
-import { defaultSiteContent } from '@/lib/defaults';
+import { defaultSiteContent, defaultServices, defaultBrands } from '@/lib/defaults';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -20,7 +20,35 @@ export default function Home() {
   useEffect(() => {
     const unsub = onSnapshot(doc(db, 'config', 'siteContent'), (snapshot) => {
       if (snapshot.exists()) {
-        setContent(snapshot.data() as SiteContent);
+        const firestoreData = snapshot.data() as any;
+        
+        // Merge Blindado: Si el dato de Firestore está vacío o es un string en blanco, usamos el default
+        const mergedServices = (firestoreData.services || []).length > 0 
+          ? firestoreData.services.map((s: any, i: number) => ({
+              ...s,
+              imgUrl: s.imgUrl && s.imgUrl.trim() !== "" ? s.imgUrl : (defaultServices[i]?.imgUrl || "")
+            }))
+          : defaultServices;
+
+        const mergedBrands = (firestoreData.brands || []).length > 0
+          ? firestoreData.brands.map((b: any, i: number) => ({
+              ...b,
+              url: b.url && b.url.trim() !== "" ? b.url : (defaultBrands[i]?.url || "")
+            }))
+          : defaultBrands;
+
+        setContent({
+          ...defaultSiteContent,
+          ...firestoreData,
+          services: mergedServices,
+          brands: mergedBrands,
+          seo: {
+            ...defaultSiteContent.seo,
+            ...(firestoreData.seo || {})
+          }
+        });
+      } else {
+        setContent(defaultSiteContent);
       }
     });
     return () => unsub();
@@ -28,9 +56,7 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-background transition-colors duration-500">
-      {/* Capa de Fondo - Limpia y Tecnológica */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Solo mostramos la imagen en modo oscuro para profundidad, en claro dejamos el blanco puro con grid */}
         <div 
           className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')] opacity-0 dark:opacity-30 bg-cover bg-center transition-opacity duration-700" 
           style={{ mixBlendMode: 'overlay' }}

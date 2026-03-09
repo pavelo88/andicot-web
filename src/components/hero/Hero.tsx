@@ -20,7 +20,7 @@ export const Hero = ({ content }: { content: SiteContent }) => {
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-bold mb-8 tracking-tighter leading-[1.1] text-foreground">
             {content.heroTitle.split(' ').map((word, i) => (
-              <span key={i} className={i % 3 === 0 ? "text-primary block md:inline" : ""}>{word} </span>
+              <span key={i} className={i % 3 === 0 ? "text-primary" : ""}>{word} </span>
             ))}
           </h1>
           <p className="text-base md:text-lg font-body italic text-muted-foreground max-w-xl mb-12 leading-relaxed opacity-90">
@@ -36,13 +36,9 @@ export const Hero = ({ content }: { content: SiteContent }) => {
             >
               <Sparkles size={20} className="text-primary" /> Asistente IA
             </button>
-            <a href="#soluciones" className="glass-card text-foreground font-medium py-4 px-8 rounded-xl text-base hover:bg-primary/10 transition-all duration-300 text-center flex items-center justify-center gap-2 border-border">
-              Soluciones <ArrowDown size={18} className="animate-bounce" />
-            </a>
           </div>
         </div>
         
-        {/* Contenedor de estadísticas reducido un 30% en ancho */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <div className="w-full lg:w-[70%] grid grid-cols-2 gap-3">
             {content.stats.map((stat) => (

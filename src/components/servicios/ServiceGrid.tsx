@@ -21,32 +21,32 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[480px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
-        {service.imgUrl ? (
+        {service.imgUrl && (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
-        ) : (
+        )}
+        {!service.imgUrl && (
           <div className="w-full h-full bg-muted flex items-center justify-center">
             <IconMapper name={service.icon} size={48} className="text-primary/20" />
           </div>
         )}
       </div>
       
-      {/* Contenido sin gradientes oscuros que tapen la imagen */}
       <div className="relative z-20 p-6 md:p-8">
         <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-lg">
           <IconMapper name={service.icon} size={20} />
         </div>
-        <div className="bg-black/20 backdrop-blur-sm p-4 rounded-2xl border border-white/5">
+        <div className="bg-black/10 backdrop-blur-[2px] p-4 rounded-2xl border border-white/5">
           <h3 className={cn(
             "font-headline font-bold mb-1 text-white group-hover:text-primary leading-tight",
             isLarge ? "text-2xl md:text-3xl" : "text-lg md:text-xl"
           )}>
             {service.title}
           </h3>
-          <p className="text-white/90 text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed">
+          <p className="text-white text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed">
             {service.desc}
           </p>
         </div>
