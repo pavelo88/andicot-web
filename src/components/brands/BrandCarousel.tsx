@@ -5,28 +5,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { SiteContent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
+const BrandItem = ({ brand }: { brand: SiteContent['brands'][0] }) => {
   return (
-    <div 
-      className={cn(
-        "w-[140px] md:w-[200px] flex-shrink-0 flex items-center justify-center px-4 transition-all duration-300",
-        isActive ? "scale-105" : "scale-95"
-      )}
-    >
+    <div className="w-[160px] md:w-[220px] flex-shrink-0 flex items-center justify-center px-6">
       {brand.url ? (
         <img 
           src={brand.url} 
           alt={brand.name} 
-          className={cn(
-            "max-h-8 md:max-h-12 max-w-full transition-all duration-300 pointer-events-none",
-            isActive ? "opacity-100 grayscale-0" : "opacity-80 grayscale"
-          )}
+          className="max-h-10 md:max-h-16 max-w-full object-contain pointer-events-none"
         />
       ) : (
-        <span className={cn(
-          "font-bold text-2xl md:text-3xl tracking-widest uppercase transition-all duration-300 text-center leading-none pointer-events-none",
-          isActive ? "text-primary opacity-100" : "text-foreground opacity-60"
-        )}>
+        <span className="font-bold text-3xl md:text-5xl tracking-widest uppercase text-primary/80 text-center leading-none pointer-events-none">
           {brand.name}
         </span>
       )}
@@ -35,32 +24,6 @@ const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isAct
 };
 
 export const BrandCarousel = ({ brands }: { brands: SiteContent['brands'] }) => {
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px -48% 0px -48%',
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = Number(entry.target.getAttribute('data-index'));
-          setActiveIndex(index);
-        }
-      });
-    }, observerOptions);
-
-    itemsRef.current.forEach((item) => {
-      if (item) observer.observe(item);
-    });
-
-    return () => observer.disconnect();
-  }, [brands]);
-
   if (!brands || brands.length === 0) return null;
 
   const displayBrands = [...brands, ...brands, ...brands];
@@ -74,13 +37,8 @@ export const BrandCarousel = ({ brands }: { brands: SiteContent['brands'] }) => 
       <div className="relative w-full overflow-hidden before:absolute before:left-0 before:top-0 before:z-20 before:h-full before:w-16 md:before:w-48 before:bg-gradient-to-r before:from-[#05060d] before:to-transparent after:absolute after:right-0 after:top-0 after:z-20 after:h-full after:w-16 md:after:w-48 after:bg-gradient-to-l after:from-[#05060d] after:to-transparent">
         <div className="carousel-track items-center py-6">
           {displayBrands.map((brand, idx) => (
-            <div 
-              key={`${brand.id}-${idx}`} 
-              data-index={idx}
-              ref={el => { itemsRef.current[idx] = el; }}
-              className="flex-shrink-0"
-            >
-              <BrandItem brand={brand} isActive={activeIndex === idx} />
+            <div key={`${brand.id}-${idx}`} className="flex-shrink-0">
+              <BrandItem brand={brand} />
             </div>
           ))}
         </div>
