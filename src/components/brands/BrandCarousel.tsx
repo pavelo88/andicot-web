@@ -1,9 +1,8 @@
 
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { SiteContent } from '@/lib/types';
-import { cn } from '@/lib/utils';
 
 const BrandItem = ({ brand }: { brand: SiteContent['brands'][0] }) => {
   return (
