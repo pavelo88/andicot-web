@@ -6,29 +6,26 @@ import { SiteContent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
-  // Pintamos la imagen si hay URL, sin lógica de error que la borre
-  const isValidUrl = brand.url && brand.url.trim() !== "";
-
   return (
     <div 
       className={cn(
-        "w-[140px] md:w-[200px] flex-shrink-0 flex items-center justify-center px-4 transition-all duration-700 ease-in-out",
-        isActive ? "scale-110" : "scale-90"
+        "w-[140px] md:w-[200px] flex-shrink-0 flex items-center justify-center px-4 transition-all duration-300",
+        isActive ? "scale-105" : "scale-95"
       )}
     >
-      {isValidUrl ? (
+      {brand.url ? (
         <img 
           src={brand.url} 
           alt={brand.name} 
           className={cn(
-            "max-h-8 md:max-h-12 max-w-full transition-all duration-1000 ease-in-out pointer-events-none",
-            isActive ? "opacity-100 grayscale-0 brightness-110" : "opacity-80 grayscale brightness-95"
+            "max-h-8 md:max-h-12 max-w-full transition-all duration-300 pointer-events-none",
+            isActive ? "opacity-100 grayscale-0" : "opacity-80 grayscale"
           )}
         />
       ) : (
         <span className={cn(
-          "font-bold text-lg md:text-xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
-          isActive ? "text-primary opacity-100" : "text-white opacity-60"
+          "font-bold text-2xl md:text-3xl tracking-widest uppercase transition-all duration-300 text-center leading-none pointer-events-none",
+          isActive ? "text-primary opacity-100" : "text-foreground opacity-60"
         )}>
           {brand.name}
         </span>
@@ -66,10 +63,7 @@ export const BrandCarousel = ({ brands }: { brands: SiteContent['brands'] }) => 
 
   if (!brands || brands.length === 0) return null;
 
-  const validBrands = brands.filter(b => b.name || b.url);
-  if (validBrands.length === 0) return null;
-
-  const displayBrands = [...validBrands, ...validBrands, ...validBrands];
+  const displayBrands = [...brands, ...brands, ...brands];
 
   return (
     <section className="py-12 md:py-20 bg-[#05060d] border-y border-white/5 relative z-10 overflow-hidden pointer-events-none">

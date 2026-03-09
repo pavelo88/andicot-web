@@ -14,37 +14,32 @@ import {
 } from "@/components/ui/carousel";
 
 const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?: boolean }) => {
-  const isValidUrl = service.imgUrl && service.imgUrl.trim() !== "";
-
   return (
     <div className={cn(
-      "group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-500 hover:shadow-[0_20px_60px_rgba(164,200,81,0.25)] hover:border-primary/50 flex flex-col justify-end",
+      "group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end",
       "h-[300px]",
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[460px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
-        {isValidUrl ? (
+        {service.imgUrl ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
-            className="w-full h-full object-cover opacity-100 group-hover:scale-110 transition-all duration-1000" 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
           />
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
-            <div className="text-primary/20 scale-[6]">
-              <IconMapper name={service.icon} />
-            </div>
+            <IconMapper name={service.icon} size={48} className="text-primary/20" />
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-10" />
       </div>
       
-      <div className="relative z-20 p-6 md:p-8">
-        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 transition-all duration-500 shadow-lg">
+      <div className="relative z-20 p-6 md:p-8 bg-gradient-to-t from-black/60 to-transparent">
+        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-lg">
           <IconMapper name={service.icon} size={20} />
         </div>
         <h3 className={cn(
-          "font-headline font-bold mb-2 text-white transition-colors group-hover:text-primary leading-tight",
+          "font-headline font-bold mb-2 text-white group-hover:text-primary leading-tight",
           isLarge ? "text-2xl md:text-4xl" : "text-lg md:text-xl"
         )}>
           {service.title}
