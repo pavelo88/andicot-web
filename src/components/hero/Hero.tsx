@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -12,7 +11,7 @@ export const Hero = ({ content }: { content: SiteContent }) => {
   };
 
   return (
-    <section id="top" className="relative min-h-screen pt-32 pb-20 flex flex-col justify-center overflow-hidden z-10">
+    <section id="top" className="relative min-h-[90vh] pt-32 pb-20 flex flex-col justify-center overflow-hidden z-10">
       <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-12 gap-12 items-center relative z-10">
         <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass-card border-primary/20 text-primary text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
@@ -39,8 +38,9 @@ export const Hero = ({ content }: { content: SiteContent }) => {
           </div>
         </div>
         
+        {/* Contenedor de estadísticas reducido un 30% en escritorio */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
-          <div className="w-full lg:w-[70%] grid grid-cols-2 gap-3">
+          <div className="w-full max-w-[400px] grid grid-cols-2 gap-4">
             {content.stats.map((stat) => (
               <div key={stat.id} className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center hover:border-primary/50 transition-all duration-300 group aspect-square">
                 <div className="w-10 h-10 rounded-xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-3 text-primary group-hover:bg-primary group-hover:text-secondary transition-all shadow-md">

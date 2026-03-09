@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -19,8 +18,8 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
   return (
     <div className={cn(
       "group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end",
-      "h-[320px]",
-      isLarge ? "md:col-span-2 md:row-span-2 md:h-[480px]" : "col-span-1"
+      "h-[300px] md:h-[350px]",
+      isLarge ? "lg:col-span-2 lg:row-span-2 lg:h-full" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
         {!hasError && service.imgUrl ? (
@@ -33,22 +32,25 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
             <IconMapper name={service.icon} size={48} className="text-primary/20" />
+            <span className="absolute bottom-10 font-bold text-xs uppercase tracking-widest text-primary opacity-50">{service.title}</span>
           </div>
         )}
+        {/* Sombra sutil solo en la base para legibilidad, no tapa la foto */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
       </div>
       
       <div className="relative z-20 p-6 md:p-8">
-        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-lg">
+        <div className="w-10 h-10 rounded-2xl bg-primary text-secondary flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
           <IconMapper name={service.icon} size={20} />
         </div>
-        <div className="bg-black/10 backdrop-blur-[2px] p-4 rounded-2xl border border-white/5">
+        <div className="space-y-2">
           <h3 className={cn(
-            "font-headline font-bold mb-1 text-white group-hover:text-primary leading-tight",
+            "font-headline font-bold text-white group-hover:text-primary leading-tight transition-colors",
             isLarge ? "text-2xl md:text-3xl" : "text-lg md:text-xl"
           )}>
             {service.title}
           </h3>
-          <p className="text-white text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed">
+          <p className="text-white/80 text-[10px] md:text-xs font-body italic line-clamp-2 leading-relaxed">
             {service.desc}
           </p>
         </div>
@@ -77,8 +79,8 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
   }, [api]);
 
   return (
-    <section id="soluciones" className="px-6 py-16 md:py-24 max-w-7xl mx-auto relative z-10 overflow-hidden">
-      <div className="text-center mb-10 md:mb-16">
+    <section id="soluciones" className="px-6 py-16 md:py-24 max-w-7xl mx-auto relative z-10">
+      <div className="text-center mb-12">
         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
            <span className="text-[10px] font-bold tracking-[0.4em] text-primary uppercase">Portfolio Tecnológico</span>
         </div>
@@ -100,6 +102,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         </div>
       </div>
 
+      {/* Mobile View: Carousel */}
       <div className="md:hidden">
         {filteredServices.length > 0 ? (
           <Carousel 
@@ -109,7 +112,7 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
           >
             <CarouselContent className="-ml-4">
               {filteredServices.map((service) => (
-                <CarouselItem key={service.id} className="pl-4 basis-[85%]">
+                <CarouselItem key={service.id} className="pl-4 basis-[90%]">
                   <ServiceCard service={service} />
                 </CarouselItem>
               ))}
@@ -123,13 +126,14 @@ export const ServiceGrid = ({ services }: { services: Service[] }) => {
         )}
       </div>
 
-      <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+      {/* Desktop View: Dynamic Grid */}
+      <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 auto-rows-[300px]">
         {filteredServices.length > 0 ? (
           filteredServices.map((service, index) => (
             <ServiceCard 
               key={service.id} 
               service={service} 
-              isLarge={!search && (index === 0 || index === 3)} 
+              isLarge={!search && (index === 0 || index === 5)} 
             />
           ))
         ) : (

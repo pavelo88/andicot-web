@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -14,10 +13,10 @@ const BrandItem = ({ brand }: { brand: SiteContent['brands'][0] }) => {
           src={brand.url} 
           alt={brand.name} 
           onError={() => setHasError(true)}
-          className="max-h-12 md:max-h-20 max-w-full object-contain pointer-events-none brightness-100 contrast-100"
+          className="max-h-12 md:max-h-16 max-w-full object-contain pointer-events-none brightness-110 contrast-100"
         />
       ) : (
-        <span className="font-bold text-lg md:text-2xl tracking-widest uppercase text-primary text-center leading-none pointer-events-none">
+        <span className="font-bold text-xl md:text-3xl tracking-widest uppercase text-primary text-center leading-none pointer-events-none opacity-80">
           {brand.name}
         </span>
       )}
@@ -28,10 +27,11 @@ const BrandItem = ({ brand }: { brand: SiteContent['brands'][0] }) => {
 export const BrandCarousel = ({ brands }: { brands: SiteContent['brands'] }) => {
   if (!brands || brands.length === 0) return null;
 
+  // Duplicamos para el efecto infinito
   const displayBrands = [...brands, ...brands, ...brands];
 
   return (
-    <section className="py-12 md:py-20 bg-[#05060d] border-y border-white/5 relative z-10 overflow-hidden pointer-events-none">
+    <section className="py-12 md:py-20 bg-[#05060d] border-y border-white/5 relative z-10 overflow-hidden">
       <div className="text-center px-6 mb-8 md:mb-12">
          <p className="text-[10px] md:text-xs font-bold tracking-[0.4em] text-primary uppercase">Aliados Estratégicos & Ecosistemas</p>
       </div>
