@@ -1,20 +1,23 @@
 
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { SiteContent } from '@/lib/types';
 
 const BrandItem = ({ brand }: { brand: SiteContent['brands'][0] }) => {
+  const [hasError, setHasError] = useState(false);
+
   return (
     <div className="w-[160px] md:w-[220px] flex-shrink-0 flex items-center justify-center px-6">
-      {brand.url ? (
+      {!hasError && brand.url ? (
         <img 
           src={brand.url} 
           alt={brand.name} 
+          onError={() => setHasError(true)}
           className="max-h-12 md:max-h-20 max-w-full object-contain pointer-events-none brightness-100 contrast-100"
         />
       ) : (
-        <span className="font-bold text-2xl md:text-4xl tracking-widest uppercase text-primary text-center leading-none pointer-events-none">
+        <span className="font-bold text-lg md:text-2xl tracking-widest uppercase text-primary text-center leading-none pointer-events-none">
           {brand.name}
         </span>
       )}

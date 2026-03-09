@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/carousel";
 
 const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?: boolean }) => {
+  const [hasError, setHasError] = useState(false);
+
   return (
     <div className={cn(
       "group relative rounded-3xl overflow-hidden glass-card cursor-pointer flex flex-col justify-end",
@@ -21,14 +23,14 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
       isLarge ? "md:col-span-2 md:row-span-2 md:h-[480px]" : "col-span-1"
     )}>
       <div className="absolute inset-0 z-0">
-        {service.imgUrl && (
+        {!hasError && service.imgUrl ? (
           <img 
             src={service.imgUrl} 
             alt={service.title} 
+            onError={() => setHasError(true)}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
-        )}
-        {!service.imgUrl && (
+        ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
             <IconMapper name={service.icon} size={48} className="text-primary/20" />
           </div>

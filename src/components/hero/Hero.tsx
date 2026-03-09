@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import { Activity, ArrowDown, Sparkles } from 'lucide-react';
+import { Activity, Sparkles } from 'lucide-react';
 import { IconMapper } from '../icons/IconMapper';
 import { SiteContent } from '@/lib/types';
 
