@@ -34,7 +34,9 @@ export const Hero = ({ content }: { content: SiteContent }) => {
               onClick={openChat}
               className="bg-secondary/10 dark:bg-secondary/50 backdrop-blur-md border border-primary/30 text-foreground dark:text-white font-bold py-4 px-8 rounded-xl text-base md:text-lg hover:bg-primary hover:text-secondary transition-all duration-500 flex items-center justify-center gap-2 group shadow-xl"
             >
-              <Sparkles size={20} className="text-primary group-hover:text-secondary transition-colors" /> Asistente IA
+              <span className="flex items-center gap-2">
+                <Sparkles size={20} className="text-primary group-hover:text-secondary transition-colors" /> Asistente IA
+              </span>
             </button>
             <a href="#soluciones" className="glass-card text-foreground font-medium py-4 px-8 rounded-xl text-base md:text-lg hover:bg-primary/10 transition-all duration-500 text-center flex items-center justify-center gap-2 border-border">
               Soluciones <ArrowDown size={18} className="animate-bounce" />
@@ -42,16 +44,16 @@ export const Hero = ({ content }: { content: SiteContent }) => {
           </div>
         </div>
         
-        {/* Cuadros de experiencia reducidos un 20% y sin parpadeo de animación */}
+        {/* Cuadros de experiencia con proporciones corregidas */}
         <div className="grid grid-cols-2 gap-3 md:gap-4">
           {content.stats.map((stat) => (
-            <div key={stat.id} className="glass-card p-3 md:p-4 rounded-3xl flex flex-col items-center justify-center text-center hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group relative">
+            <div key={stat.id} className="glass-card p-4 md:p-6 rounded-3xl flex flex-col items-center justify-center text-center hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group relative aspect-square md:aspect-auto md:h-40">
               <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-primary/20 animate-ping group-hover:bg-primary" />
-              <div className="w-7 h-7 md:w-9 md:h-9 rounded-2xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-3 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-lg">
-                <IconMapper name={stat.icon} size={16} />
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-secondary/10 dark:bg-secondary/50 border border-primary/20 flex items-center justify-center mb-4 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-lg">
+                <IconMapper name={stat.icon} size={20} />
               </div>
-              <h3 className="text-lg md:text-2xl font-bold font-headline text-foreground mb-1 tracking-tighter">{stat.value}</h3>
-              <p className="text-[6px] md:text-[8px] font-bold tracking-[0.3em] text-primary/70 uppercase">{stat.label}</p>
+              <h3 className="text-2xl md:text-3xl font-bold font-headline text-foreground mb-1 tracking-tighter">{stat.value}</h3>
+              <p className="text-[7px] md:text-[9px] font-bold tracking-[0.3em] text-primary/70 uppercase">{stat.label}</p>
             </div>
           ))}
         </div>
