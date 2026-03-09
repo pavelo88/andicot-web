@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -8,8 +7,6 @@ import { cn } from '@/lib/utils';
 const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isActive: boolean }) => {
   const [hasError, setHasError] = useState(false);
 
-  // Verificación estricta: si no hay URL o hay error, mostramos texto.
-  // Importante: No renderizamos el tag <img> si la URL está vacía.
   const isValidUrl = brand.url && brand.url.trim() !== "";
   const shouldShowText = !isValidUrl || hasError;
 
@@ -27,13 +24,13 @@ const BrandItem = ({ brand, isActive }: { brand: SiteContent['brands'][0], isAct
           onError={() => setHasError(true)}
           className={cn(
             "max-h-8 md:max-h-12 max-w-full transition-all duration-1000 ease-in-out pointer-events-none",
-            isActive ? "opacity-100 grayscale-0 brightness-110" : "opacity-40 grayscale brightness-90"
+            isActive ? "opacity-100 grayscale-0 brightness-110" : "opacity-70 grayscale brightness-95"
           )}
         />
       ) : (
         <span className={cn(
-          "font-bold text-[10px] md:text-xs tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
-          isActive ? "text-primary opacity-100" : "text-white opacity-40"
+          "font-bold text-xl md:text-2xl tracking-widest uppercase transition-all duration-1000 text-center leading-none pointer-events-none",
+          isActive ? "text-primary opacity-100" : "text-white opacity-60"
         )}>
           {brand.name}
         </span>

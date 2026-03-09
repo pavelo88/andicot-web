@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -38,7 +37,8 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
             </div>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+        {/* Degradado más suave para no "oscurecer" la imagen en exceso */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10" />
       </div>
       
       <div className="relative z-20 p-6 md:p-8">
@@ -51,7 +51,7 @@ const ServiceCard = ({ service, isLarge = false }: { service: Service, isLarge?:
         )}>
           {service.title}
         </h3>
-        <p className="text-white/80 text-[11px] md:text-sm font-body italic line-clamp-2 leading-relaxed">
+        <p className="text-white/90 text-[11px] md:text-sm font-body italic line-clamp-2 leading-relaxed">
           {service.desc}
         </p>
       </div>
