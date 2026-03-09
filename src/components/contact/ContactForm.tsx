@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -36,11 +35,11 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
   };
 
   return (
-    <section id="contacto" className="px-4 sm:px-6 py-24 relative z-10 bg-gradient-to-b from-transparent to-muted dark:to-[#05060d]">
+    <section id="contacto" className="px-4 sm:px-6 py-14 relative z-10 bg-gradient-to-b from-transparent to-muted dark:to-[#05060d]">
       <div className="max-w-7xl mx-auto">
         
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-headline font-bold mb-6 text-foreground leading-tight">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-headline font-bold mb-4 text-foreground leading-tight">
             {content.formTitle}
           </h2>
           <p className="text-muted-foreground font-body text-base md:text-lg leading-relaxed italic">
@@ -148,7 +147,7 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
                 </div>
               </div>
               
-              <div className="mt-8 relative z-10 space-y-4">
+              <div className="mt-6 relative z-10 space-y-4">
                 {status.message && (
                   <div className={`mb-4 p-4 rounded-2xl flex items-center gap-3 font-bold text-sm border ${status.type === 'error' ? 'bg-red-500/10 border-red-500/50 text-red-600' : 'bg-primary/10 border-primary/50 text-primary'}`}>
                     {status.type === 'error' ? <XCircle size={18}/> : <CheckCircle2 size={18}/>}
@@ -160,7 +159,7 @@ export const ContactForm = ({ content }: { content: SiteContent }) => {
                   <button 
                     type="submit" 
                     disabled={status.type === 'loading'} 
-                    className="flex-1 bg-primary text-secondary font-black py-5 rounded-2xl hover:bg-secondary hover:text-white dark:hover:bg-white dark:hover:text-secondary hover:scale-[1.02] active:scale-[0.98] transition-all duration-500 shadow-xl disabled:opacity-50 uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 group"
+                    className="flex-1 bg-primary text-secondary font-black py-5 rounded-2xl hover:bg-secondary hover:text-white dark:hover:bg-white dark:hover:text-secondary hover:scale-[1.02] transition-all duration-500 shadow-xl disabled:opacity-50 uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 group"
                   >
                     {status.type === 'loading' ? 'Procesando...' : (
                       <>
